@@ -23,9 +23,11 @@ deploy:
   on:
     repo: simsekgokhan/robomongo
   skip_cleanup: true
+  # Deploy draft release
+  draft: true
   # Deploy only if the build is a tagged build
-  on:
-   tags: true
-  # draft: true
+  # on:
+  # tags: true
+  
 
 # end of file
