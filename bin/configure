@@ -21,6 +21,16 @@ export Qt5PrintSupport_DIR="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/lib/cmake/Qt5Print
 export Qt5Network_DIR="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/lib/cmake/Qt5Network"
 export Qt5Xml_DIR="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/lib/cmake/Qt5Xml"
 
+echo
+echo "---- 2) Build robo-shell"
+cd $PROJECT_DIR
+echo
+echo "-- pwd"
+pwd
+echo
+echo "-- a) git clone robo-shell... "
+git clone https://github.com/paralect/robomongo-shell.git
+
 export MongoDB_DIR="$PROJECT_DIR/robomongo-shell"
 
 echo
