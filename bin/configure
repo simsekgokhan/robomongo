@@ -5,6 +5,7 @@ PROJECT_DIR=$(dirname $BIN_DIR)                                   # Get root dir
 source $BIN_DIR/common/setup $1
 
 # ------
+export ROBOMONGO_CMAKE_PREFIX_PATH="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/;$PROJECT_DIR/robomongo-shell;$PROJECT_DIR/openssl-1.0.2o"
 echo
 echo "-- ROBOMONGO_CMAKE_PREFIX_PATH:"
 echo $ROBOMONGO_CMAKE_PREFIX_PATH    
