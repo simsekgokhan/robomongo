@@ -14,6 +14,11 @@ echo
 echo "-- ls -l $PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/"
 ls -l $PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/
 
+
+export Qt5Core_DIR="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/lib/cmake/Qt5Core"
+echo "-- Qt5Core_DIR:"
+echo $Qt5Core_DIR  
+
 echo
 # ------
 
