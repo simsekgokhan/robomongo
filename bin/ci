@@ -57,13 +57,13 @@ echo
 echo "-- tar -xzf openssl-1.0.2o_built_linux.tar.gz"
 tar -xzf openssl-1.0.2o_built_linux.tar.gz
 
-# echo
-# echo "sudo apt-get update"
-# sudo apt-get update
+echo
+echo "sudo apt-get update"
+sudo apt-get update
 
-# echo
-# echo "sudo apt-get install libgl-dev"
-# sudo apt-get install libgl-dev
+echo
+echo "sudo apt-get install libgl-dev"
+sudo apt-get install libgl-dev
 
 ###########################  2. Build robo-shell ##################################################
 
