@@ -16,8 +16,7 @@ script:
 
 deploy:
   provider: releases
-  api_key:
-    secure: sa8K5w5XQes+2t/r4f4u/RAn7gf0mwf8CJ4kOW2YRsiMrODmfP9GtVXF79CXKiQSF7+cNb7JwEAaWq4Nd0FuKn0CfpICZ8L62FKvrbrFtEINRGWFoE4WtAJr8FlokQn2sYPar70PeQ7CV1AS0ur7gH02kHasTnlFRJNUMaFJTYeluNdJWuqrYNc3vmvoI7cYtaEGdvOfkNkwCPrPQQQAxg6trxdejjSE16/wHKUjAxtLHLp+8+wISq/WonrymBbHULWtS6AWl/nJlv2ISyLv2yy5RsKMv40zvuTVD5TtE0ok5CDgwdUra541b8M/0fvaqkJBc3XZYdKFhHqqwG6TugFLFybow5ozhVTp1xZj1HdRvrylQGuYVWiZ3O+znAggruY2g0SOaNAI1I+l2ndL+5PltzI5UpHC4p++YOxroTRe39ZA4s8HIgExEMgwI6Uu9nykk8HYsEubFkImOYlszX/gFENH7bJehcuQ/ppXLJ5nc/KOwqNIJO5jn5aUEBueQ8FXiKtwUAlN1y9VH8BSvfWG5BzrG9YaZlmrkbbBaLZyEtlqA5PnaMtiVApj8rDOLUtr0ihX37lSeb7gY7+QR5U7Y2pfOL/P7akVeP0D1lNibDNwu2XZBr2fGaZkBbJeJfNP6//ZTHabKcGdbGZXGuHkpnpfA3Ccr766JffRMO0=
+  api_key: df91e078d1a9c32cf11ba754a3886642d6b34cd9    
   file_glob: true
   # file: build/release/package/robo3t*
   file: bin/ci
