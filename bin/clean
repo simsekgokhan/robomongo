@@ -5,3 +5,7 @@ PROJECT_DIR=$(dirname $BIN_DIR)                                   # Get root dir
 source $BIN_DIR/common/setup $1
 
 cd $VARIANT_DIR && rm -rf $BUILD_DIR_NAME
+
+echo 
+echo "ls -l /usr/lib/x86_64-linux-gnu/libstdc++"
+ls -l /usr/lib/x86_64-linux-gnu/libstdc++
