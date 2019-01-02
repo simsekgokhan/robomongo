@@ -87,14 +87,14 @@ echo
 echo "-- ROBOMONGO_CMAKE_PREFIX_PATH:"
 echo $ROBOMONGO_CMAKE_PREFIX_PATH                           
 
-echo
-echo "-- pip install"
-pip install --user -r etc/pip/dev-requirements.txt
+# echo
+# echo "-- pip install"
+# pip install --user -r etc/pip/dev-requirements.txt
 
-echo
-echo "-- chmod +x bin/*"
-chmod +x bin/*
+# echo
+# echo "-- chmod +x bin/*"
+# chmod +x bin/*
 
-echo
-echo "-- bin/build"
-bin/build 
+# echo
+# echo "-- bin/build"
+# bin/build 
