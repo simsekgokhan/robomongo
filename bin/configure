@@ -31,6 +31,10 @@ echo
 echo "-- a) git clone robo-shell... "
 git clone https://github.com/paralect/robomongo-shell.git
 
+echo
+echo "-- ls -l"
+ls -l
+
 export MongoDB_DIR="$PROJECT_DIR/robomongo-shell"
 
 echo
