@@ -14,10 +14,12 @@ echo
 echo "-- ls -l $PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/"
 ls -l $PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/
 
-
 export Qt5Core_DIR="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/lib/cmake/Qt5Core"
-echo "-- Qt5Core_DIR:"
-echo $Qt5Core_DIR  
+export Qt5Gui_DIR="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/lib/cmake/Qt5Gui"
+export Qt5Widgets_DIR="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/lib/cmake/Qt5Widgets"
+export Qt5PrintSupport_DIR="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/lib/cmake/Qt5PrintSupport"
+export Qt5Network_DIR="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/lib/cmake/Qt5Network"
+export Qt5Xml_DIR="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/lib/cmake/Qt5Xml"
 
 echo
 # ------
