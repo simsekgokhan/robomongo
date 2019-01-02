@@ -77,11 +77,13 @@ echo
 echo "-- a) git clone robo-shell... "
 git clone https://github.com/paralect/robomongo-shell.git
 
-# echo
-# echo "-- cd robomongo-shell"
-# cd robomongo-shell
-# echo "-- pwd"
-# pwd
+echo
+echo "-- cd robomongo-shell"
+cd robomongo-shell
+echo "-- pwd"
+pwd
+echo "-- ll"
+ls -l
 
 # export ROBOMONGO_CMAKE_PREFIX_PATH="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/;$PROJECT_DIR/robomongo-shell;$PROJECT_DIR/openssl-1.0.2o"
 # echo
