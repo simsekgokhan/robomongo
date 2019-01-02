@@ -67,28 +67,28 @@ sudo apt-get install libgl-dev
 
 ###########################  2. Build robo-shell ##################################################
 
-# echo
-# echo "---- 2) Build robo-shell"
-# cd $PROJECT_DIR
-# echo
-# echo "-- pwd"
-# pwd
-# echo
-# echo "-- a) git clone robo-shell... "
-# git clone https://github.com/paralect/robomongo-shell.git
+echo
+echo "---- 2) Build robo-shell"
+cd $PROJECT_DIR
+echo
+echo "-- pwd"
+pwd
+echo
+echo "-- a) git clone robo-shell... "
+git clone https://github.com/paralect/robomongo-shell.git
 
-# echo
-# echo "-- cd robomongo-shell"
-# cd robomongo-shell
-# echo "-- pwd"
-# pwd
-# echo "-- ll"
-# ls -l
+echo
+echo "-- cd robomongo-shell"
+cd robomongo-shell
+echo "-- pwd"
+pwd
+echo "-- ll"
+ls -l
 
-# export ROBOMONGO_CMAKE_PREFIX_PATH="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/;$PROJECT_DIR/robomongo-shell;$PROJECT_DIR/openssl-1.0.2o"
-# echo
-# echo "-- ROBOMONGO_CMAKE_PREFIX_PATH:"
-# echo $ROBOMONGO_CMAKE_PREFIX_PATH                           
+export ROBOMONGO_CMAKE_PREFIX_PATH="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/;$PROJECT_DIR/robomongo-shell;$PROJECT_DIR/openssl-1.0.2o"
+echo
+echo "-- ROBOMONGO_CMAKE_PREFIX_PATH:"
+echo $ROBOMONGO_CMAKE_PREFIX_PATH                           
 
 # echo
 # echo "-- pip install"
@@ -101,3 +101,30 @@ sudo apt-get install libgl-dev
 # echo
 # echo "-- bin/build"
 # bin/build 
+
+###########################  4. robo ##################################################
+# https://github.com/simsekgokhan/Qt_for_CI
+
+echo
+echo "---- 4) robo"
+cd $PROJECT_DIR  
+
+echo 
+echo "-- bin/configure"
+bin/configure 
+
+# echo 
+# echo "-- bin/build"
+# bin/build 
+
+################################ END #############################################
+
+# --------------------------- END ------------------------
+echo
+# echo "-- ll aft"
+# pwd
+# ls -l
+
+echo
+echo "----- DONE ----"
+
