@@ -11,5 +11,5 @@ echo "sudo ls -l /usr/lib/"
 sudo ls -l /usr/lib/
 
 echo 
-echo "sudo ls -l /usr/lib/x86_64-linux-gnu/libstdc++"
-sudo ls -l /usr/lib/x86_64-linux-gnu/libstdc++
+echo "sudo ls -l /usr/lib/x86_64-linux-gnu/libstdc++*"
+sudo ls -l /usr/lib/x86_64-linux-gnu/libstdc++*
