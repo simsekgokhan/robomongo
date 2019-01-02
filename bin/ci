@@ -16,26 +16,27 @@ pwd
 echo
 echo "---- 1) 1. Install req'ments"
 cd $PROJECT_DIR
-echo
-echo "-- dl scons"                  
-wget https://ftp.osuosl.org/pub/blfs/conglomeration/scons/scons-2.5.1.tar.gz
-echo
-echo "-- pwd"                  
-pwd
-echo "-- ls -l"                  
-ls -l
 
-echo
-echo "-- unzip scons"
-tar -xzf scons*
+# echo
+# echo "-- dl scons"                  
+# wget https://ftp.osuosl.org/pub/blfs/conglomeration/scons/scons-2.5.1.tar.gz
+# echo
+# echo "-- pwd"                  
+# pwd
+# echo "-- ls -l"                  
+# ls -l
 
-echo
-echo "-- install scons"                  
-sudo python scons-2.5.1/setup.py install > sclogs
+# echo
+# echo "-- unzip scons"
+# tar -xzf scons*
 
-echo
-echo "-- scons -v"                  
-scons -v    
+# echo
+# echo "-- install scons"                  
+# sudo python scons-2.5.1/setup.py install > sclogs
+
+# echo
+# echo "-- scons -v"                  
+# scons -v    
 
 echo
 echo "-- a) git clone Qt_for_CI... "
@@ -56,36 +57,36 @@ echo
 echo "-- tar -xzf openssl-1.0.2o_built_linux.tar.gz"
 tar -xzf openssl-1.0.2o_built_linux.tar.gz
 
-echo
-echo "sudo apt-get update"
-sudo apt-get update
+# echo
+# echo "sudo apt-get update"
+# sudo apt-get update
 
-echo
-echo "sudo apt-get install libgl-dev"
-sudo apt-get install libgl-dev
+# echo
+# echo "sudo apt-get install libgl-dev"
+# sudo apt-get install libgl-dev
 
 ###########################  2. Build robo-shell ##################################################
 
-echo
-echo "---- 2) Build robo-shell"
-cd $PROJECT_DIR
-echo
-echo "-- pwd"
-pwd
-echo
-echo "-- a) git clone robo-shell... "
-git clone https://github.com/paralect/robomongo-shell.git
+# echo
+# echo "---- 2) Build robo-shell"
+# cd $PROJECT_DIR
+# echo
+# echo "-- pwd"
+# pwd
+# echo
+# echo "-- a) git clone robo-shell... "
+# git clone https://github.com/paralect/robomongo-shell.git
 
-echo
-echo "-- cd robomongo-shell"
-cd robomongo-shell
-echo "-- pwd"
-pwd
+# echo
+# echo "-- cd robomongo-shell"
+# cd robomongo-shell
+# echo "-- pwd"
+# pwd
 
-export ROBOMONGO_CMAKE_PREFIX_PATH="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/;$PROJECT_DIR/robomongo-shell;$PROJECT_DIR/openssl-1.0.2o"
-echo
-echo "-- ROBOMONGO_CMAKE_PREFIX_PATH:"
-echo $ROBOMONGO_CMAKE_PREFIX_PATH                           
+# export ROBOMONGO_CMAKE_PREFIX_PATH="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/;$PROJECT_DIR/robomongo-shell;$PROJECT_DIR/openssl-1.0.2o"
+# echo
+# echo "-- ROBOMONGO_CMAKE_PREFIX_PATH:"
+# echo $ROBOMONGO_CMAKE_PREFIX_PATH                           
 
 # echo
 # echo "-- pip install"
