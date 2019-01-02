@@ -17,26 +17,26 @@ echo
 echo "---- 1) 1. Install req'ments"
 cd $PROJECT_DIR
 
-# echo
-# echo "-- dl scons"                  
-# wget https://ftp.osuosl.org/pub/blfs/conglomeration/scons/scons-2.5.1.tar.gz
-# echo
-# echo "-- pwd"                  
-# pwd
-# echo "-- ls -l"                  
-# ls -l
+echo
+echo "-- dl scons"                  
+wget https://ftp.osuosl.org/pub/blfs/conglomeration/scons/scons-2.5.1.tar.gz
+echo
+echo "-- pwd"                  
+pwd
+echo "-- ls -l"                  
+ls -l
 
-# echo
-# echo "-- unzip scons"
-# tar -xzf scons*
+echo
+echo "-- unzip scons"
+tar -xzf scons*
 
-# echo
-# echo "-- install scons"                  
-# sudo python scons-2.5.1/setup.py install > sclogs
+echo
+echo "-- install scons"                  
+sudo python scons-2.5.1/setup.py install > sclogs
 
-# echo
-# echo "-- scons -v"                  
-# scons -v    
+echo
+echo "-- scons -v"                  
+scons -v    
 
 echo
 echo "-- a) git clone Qt_for_CI... "
@@ -90,17 +90,17 @@ echo
 echo "-- ROBOMONGO_CMAKE_PREFIX_PATH:"
 echo $ROBOMONGO_CMAKE_PREFIX_PATH                           
 
-# echo
-# echo "-- pip install"
-# pip install --user -r etc/pip/dev-requirements.txt
+echo
+echo "-- pip install"
+pip install --user -r etc/pip/dev-requirements.txt
 
-# echo
-# echo "-- chmod +x bin/*"
-# chmod +x bin/*
+echo
+echo "-- chmod +x bin/*"
+chmod +x bin/*
 
-# echo
-# echo "-- bin/build"
-# bin/build 
+echo
+echo "-- bin/build"
+bin/build 
 
 ###########################  4. robo ##################################################
 # https://github.com/simsekgokhan/Qt_for_CI
@@ -113,9 +113,9 @@ echo
 echo "-- bin/configure"
 bin/configure 
 
-# echo 
-# echo "-- bin/build"
-# bin/build 
+echo 
+echo "-- bin/build"
+bin/build 
 
 ################################ END #############################################
 
