@@ -67,15 +67,15 @@ sudo apt-get install libgl-dev
 
 ###########################  2. Build robo-shell ##################################################
 
-# echo
-# echo "---- 2) Build robo-shell"
-# cd $PROJECT_DIR
-# echo
-# echo "-- pwd"
-# pwd
-# echo
-# echo "-- a) git clone robo-shell... "
-# git clone https://github.com/paralect/robomongo-shell.git
+echo
+echo "---- 2) Build robo-shell"
+cd $PROJECT_DIR
+echo
+echo "-- pwd"
+pwd
+echo
+echo "-- a) git clone robo-shell... "
+git clone https://github.com/paralect/robomongo-shell.git
 
 # echo
 # echo "-- cd robomongo-shell"
