@@ -9,7 +9,7 @@ language: cpp
 
 script:
   - bash bin/clean
-  - bash bin/ci
+  # - bash bin/ci
   # - bash bin/configure 
   # - bash bin/build
   # - bash bin/run-unit-tests 
@@ -19,7 +19,8 @@ deploy:
   api_key:
     secure: H+LVG1STs/sRBw2gTN6mf7AnXKD6gExelTz67Gux/RdBnsUdrBb+Nw7lyoqiLfyv075JzhdJWPA5VowvpAVN80M+S+jsPvMEkkAZmAZUvg+W4HuF64GzJn+t05C1KHFgDvek3T5FLzUUbP9yy88Iq4QGUuNUpKIWGipmobiHt1M5pOgdM0k/eeq/OSG3EN3LnAbeCsl14N6Rspj+PaL7CgvjywnRpWwyHpYwmZzc35RBSQ8dOBH+Alv5rX9y1ZgMEnaSLgXHhQ7+J6b+G8MSIT2l2l2N/yvX/YIPlh1s/iiikk6/t5MiHCCWRZfgIa+z5vNG0m6ek/2NBGbC2GOKrAtXCpkVs56H7ybhBvvOcZ2rPIODThR9NKPN5A+zKaBJDZI4/I/oZDw/hb/KmMCSc6XB9G57//iv9tE8ZzIKGcHWJDWM5Ol2ztcydNBKKngIgInppRJs2WGb2QKfycqobFCnZULARt2ZjYsZ73v9EsMlxyBBXWQ+k9geKIVsZj/LzR9So2GiXG2Mx9zsja+jUhytBh2YoN1R/vfhUIlFGUN1T/CExGdj0hOU+TgXRAWPT/jG/9m78U66kJu6E7AdZCqSH8rfpHtSBH70LUjJnaB7YZkK9CfQzmeiKDzP9W75pWHvNrTzFuRXMNXgSlVdBPEzB0M533l3TujBTsHC4B8=
   file_glob: true
-  file: build/release/package/robo3t*
+  # file: build/release/package/robo3t*
+  file: bin/ci
   on:
     repo: simsekgokhan/robomongo
   skip_cleanup: true
