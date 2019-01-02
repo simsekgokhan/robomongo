@@ -7,8 +7,8 @@ source $BIN_DIR/common/setup $1
 cd $VARIANT_DIR && rm -rf $BUILD_DIR_NAME
 
 echo 
-echo "sudo ls -l /usr/lib/"
-sudo ls -l /usr/lib/
+echo "gcc -v"
+gcc -v
 
 echo 
 echo "sudo ls -l /usr/lib/x86_64-linux-gnu/libstdc++*"
