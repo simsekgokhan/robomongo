@@ -5,46 +5,46 @@ PROJECT_DIR=$(dirname $BIN_DIR)                                   # Get root dir
 source $BIN_DIR/common/setup $1
 
 # ------
-export ROBOMONGO_CMAKE_PREFIX_PATH="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/;$PROJECT_DIR/robomongo-shell;$PROJECT_DIR/openssl-1.0.2o"
-echo
-echo "-- ROBOMONGO_CMAKE_PREFIX_PATH:"
-echo $ROBOMONGO_CMAKE_PREFIX_PATH    
+# export ROBOMONGO_CMAKE_PREFIX_PATH="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/;$PROJECT_DIR/robomongo-shell;$PROJECT_DIR/openssl-1.0.2o"
+# echo
+# echo "-- ROBOMONGO_CMAKE_PREFIX_PATH:"
+# echo $ROBOMONGO_CMAKE_PREFIX_PATH    
 
-echo
-echo "-- ls -l $PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/"
-ls -l $PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/
+# echo
+# echo "-- ls -l $PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/"
+# ls -l $PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/
 
-export Qt5Core_DIR="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/lib/cmake/Qt5Core"
-export Qt5Gui_DIR="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/lib/cmake/Qt5Gui"
-export Qt5Widgets_DIR="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/lib/cmake/Qt5Widgets"
-export Qt5PrintSupport_DIR="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/lib/cmake/Qt5PrintSupport"
-export Qt5Network_DIR="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/lib/cmake/Qt5Network"
-export Qt5Xml_DIR="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/lib/cmake/Qt5Xml"
+# export Qt5Core_DIR="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/lib/cmake/Qt5Core"
+# export Qt5Gui_DIR="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/lib/cmake/Qt5Gui"
+# export Qt5Widgets_DIR="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/lib/cmake/Qt5Widgets"
+# export Qt5PrintSupport_DIR="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/lib/cmake/Qt5PrintSupport"
+# export Qt5Network_DIR="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/lib/cmake/Qt5Network"
+# export Qt5Xml_DIR="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/lib/cmake/Qt5Xml"
 
-echo
-echo "---- 2) Build robo-shell"
-cd $PROJECT_DIR
-echo
-echo "-- pwd"
-pwd
-echo
-echo "-- a) git clone robo-shell... "
-git clone https://github.com/paralect/robomongo-shell.git
+# echo
+# echo "---- 2) Build robo-shell"
+# cd $PROJECT_DIR
+# echo
+# echo "-- pwd"
+# pwd
+# echo
+# echo "-- a) git clone robo-shell... "
+# git clone https://github.com/paralect/robomongo-shell.git
 
-echo
-echo "-- ls -l"
-ls -l
+# echo
+# echo "-- ls -l"
+# ls -l
 
-export MongoDB_DIR="$PROJECT_DIR/robomongo-shell"
+# export MongoDB_DIR="$PROJECT_DIR/robomongo-shell"
 
-echo
-echo "-- echo MongoDB_DIR:"
-echo $MongoDB_DIR
-echo
-echo "-- ls -l MongoDB_DIR:"
-echo ls -l $MongoDB_DIR
+# echo
+# echo "-- echo MongoDB_DIR:"
+# echo $MongoDB_DIR
+# echo
+# echo "-- ls -l MongoDB_DIR:"
+# echo ls -l $MongoDB_DIR
 
-echo
+# echo
 # ------
 
 cd $BUILD_DIR
