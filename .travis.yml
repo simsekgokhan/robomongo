@@ -1,34 +1,14 @@
 os:
-  - linux
-  # - osx
-  # - windows
-
+- linux
 dist: xenial
 sudo: require
 language: cpp
-
 script:
-  - bash bin/clean
-  # - bash bin/ci
-  # - bash bin/configure 
-  # - bash bin/build
-  # - bash bin/run-unit-tests 
-
+- bash bin/clean
 deploy:
   provider: releases
   api_key:
-      secure: sa8K5w5XQes+2t/r4f4u/RAn7gf0mwf8CJ4kOW2YRsiMrODmfP9GtVXF79CXKiQSF7+cNb7JwEAaWq4Nd0FuKn0CfpICZ8L62FKvrbrFtEINRGWFoE4WtAJr8FlokQn2sYPar70PeQ7CV1AS0ur7gH02kHasTnlFRJNUMaFJTYeluNdJWuqrYNc3vmvoI7cYtaEGdvOfkNkwCPrPQQQAxg6trxdejjSE16/wHKUjAxtLHLp+8+wISq/WonrymBbHULWtS6AWl/nJlv2ISyLv2yy5RsKMv40zvuTVD5TtE0ok5CDgwdUra541b8M/0fvaqkJBc3XZYdKFhHqqwG6TugFLFybow5ozhVTp1xZj1HdRvrylQGuYVWiZ3O+znAggruY2g0SOaNAI1I+l2ndL+5PltzI5UpHC4p++YOxroTRe39ZA4s8HIgExEMgwI6Uu9nykk8HYsEubFkImOYlszX/gFENH7bJehcuQ/ppXLJ5nc/KOwqNIJO5jn5aUEBueQ8FXiKtwUAlN1y9VH8BSvfWG5BzrG9YaZlmrkbbBaLZyEtlqA5PnaMtiVApj8rDOLUtr0ihX37lSeb7gY7+QR5U7Y2pfOL/P7akVeP0D1lNibDNwu2XZBr2fGaZkBbJeJfNP6//ZTHabKcGdbGZXGuHkpnpfA3Ccr766JffRMO0=
-  file_glob: true
-  # file: build/release/package/robo3t*
-  file: "bin/ci"
+    secure: cPnNGWA2jiGl2BzaLB+GGi3qhkYfxQkZFuBObj3lF37WsbWER2e8VbUM0B1bAQYHu8v4BExzdwmrDBhaxXj9hmRwXI99cLq+SB1SUTwm6G/jSaY22Ofzk5XFnx0OiXEPkSfaqqvSq4GfkC31TlldboKyhF209FZe+qd7pXhCgK8IW2IgLALVgtUONbs5ZzILtNQffvpCl9QdNzbV4kO9VNsltRejviKzic97rBY2iBJt0WBmpCSH4366yoqiZpUECk1B32aDIJmDES0CozWBUHLQ22Rqls6ALgbDAdk3yx+VvCXC/bwgO3p92kdQaMEqDuzQfjeidYczAA08+SDRlczO7hm6QcsPdCpZapoYpXlpVETGPtpCB4qeg1W1JcddsxFfK2K2PusP+0IKpSIRR0PvqGyhxTtOEZE7NWIr8UGlRN8IZ0KEZrP+fJCxW1RoSNze5Uw6+xPKSutocRsxSIC1vxzxBQApBV9WlzpxhWazsn/puO5Qs5Xwig3MQNwQBcjVCIjFp2npxPgKaX42xu0QHHujnSj1w7+CUdBPLiItLInKegvHmbjv5hHyJ9yEk8jr5Pjl1H0jGv/wYv+K+B1jZwnvhMb0y5WKmMq8T8N3hhHTl3R/hmURnjWPBA+cx6+/zeSDs2+Elf8d0k373Pp0isDSx1TSS4FuEtI1/VU=
+  file: '"bin/ci"'
   on:
     repo: simsekgokhan/robomongo
-  skip_cleanup: true
-  overwrite: true
-  # Deploy draft release
-  draft: true
-  # Deploy only if the build is a tagged build
-  # on:
-  # tags: true  
-
-# end of file
