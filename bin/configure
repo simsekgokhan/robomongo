@@ -9,6 +9,12 @@ export ROBOMONGO_CMAKE_PREFIX_PATH="$PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/;$PROJECT_
 echo
 echo "-- ROBOMONGO_CMAKE_PREFIX_PATH:"
 echo $ROBOMONGO_CMAKE_PREFIX_PATH    
+
+echo
+echo "-- ls -l $PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/"
+ls -l $PROJECT_DIR/Qt5.9.3/5.9.3/gcc_64/
+
+echo
 # ------
 
 cd $BUILD_DIR
