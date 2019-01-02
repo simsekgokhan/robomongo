@@ -119,7 +119,12 @@ bin/build
 
 echo 
 echo "-- bin/pack"
-bin/build 
+bin/pack
+
+echo 
+echo "-- ll build/release/package/"
+ls -l build/release/package/
+
 
 ################################ END #############################################
 
