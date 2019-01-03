@@ -13,8 +13,16 @@ echo "mkdir -p build/release/package/"
 mkdir -p build/release/package/
 
 echo 
-echo "cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6.21 build/release/package/robo3t-1.3.0-linux-x86_64-3d37f2e.tar.gz"
-cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6.21 build/release/package/robo3t-1.3.0-linux-x86_64-3d37f2e.tar.gz
+echo "pwd"
+pwd
+
+echo 
+echo "ls -l"
+ls -l
+
+echo 
+echo "cp notes.txt build/release/package/robo3t-1.3.0-linux-x86_64-3d37f2e.tar.gz"
+cp notes.txt build/release/package/robo3t-1.3.0-linux-x86_64-3d37f2e.tar.gz
 
 echo 
 echo "ls -l build/release/package/"
