@@ -5,30 +5,3 @@ PROJECT_DIR=$(dirname $BIN_DIR)                                   # Get root dir
 source $BIN_DIR/common/setup $1
 
 cd $VARIANT_DIR && rm -rf $BUILD_DIR_NAME
-
-echo "----------------------"
-
-echo 
-echo "cd $PROJECT_DIR"
-cd $PROJECT_DIR
-
-echo 
-echo "mkdir -p build/release/package/"
-mkdir -p build/release/package/
-
-sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-sudo apt-get update
-sudo apt-get install gcc-5 g++-5    
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5
-
-echo 
-echo "ls -l /usr/lib/x86_64-linux-gnu/libstdc++.so.6*"
-ls -l /usr/lib/x86_64-linux-gnu/libstdc++.so.6*
-
-echo 
-echo "cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6* build/release/package/"
-cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6* build/release/package/
-
-echo 
-echo "ls -l build/release/package/"
-ls -l build/release/package/
