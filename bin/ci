@@ -18,6 +18,17 @@ echo "---- 1) 1. Install req'ments"
 cd $PROJECT_DIR
 
 echo
+echo "-- apt-get install gcc-5 g++-5"
+sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+sudo apt-get update
+sudo apt-get install gcc-5 g++-5    
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5
+
+echo
+echo "-- gcc -v"  
+gcc -v
+
+echo
 echo "-- dl scons"                  
 wget https://ftp.osuosl.org/pub/blfs/conglomeration/scons/scons-2.5.1.tar.gz
 echo
@@ -125,6 +136,9 @@ echo
 echo "-- ll build/release/package/"
 ls -l build/release/package/
 
+echo
+echo "-- gcc -v"  
+gcc -v
 
 ################################ END #############################################
 
