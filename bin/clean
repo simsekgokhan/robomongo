@@ -6,40 +6,4 @@ source $BIN_DIR/common/setup $1
 
 cd $VARIANT_DIR && rm -rf $BUILD_DIR_NAME
 
-echo "----------------------"
-
-echo 
-echo "cd $PROJECT_DIR"
-cd $PROJECT_DIR
-
-echo 
-echo "pwd"
-pwd
-
-echo 
-echo "mkdir -p build/release/package/"
-mkdir -p build/release/package/
-
-echo 
-echo "cp notes.txt build/release/package/robo3t-1.3.0-linux-x86_64-3d37f2e.tar.gz"
-cp notes.txt build/release/package/robo3t-1.3.0-linux-x86_64-3d37f2e.tar.gz
-
-# echo 
-# echo "cp notes.txt build/release/package/"
-# cp notes.txt build/release/package/
-
-echo 
-echo "ls -l build/release/package/"
-ls -l build/release/package/
-
-# echo 
-# echo "cp build/release/package/notes* bin/"
-# cp build/release/package/notes* bin/
-
-# echo 
-# echo "ls -l bin/"
-# ls -l bin/
-
-
-
 
