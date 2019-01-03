@@ -9,7 +9,7 @@ language: cpp
 
 script:
   - bash bin/clean
-  # - bash bin/ci
+  - bash bin/ci
   # - bash scripts/build
   # - bash scripts/run-unit-tests 
 
