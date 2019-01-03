@@ -105,10 +105,9 @@ if(SYSTEM_LINUX)
         QXcbIntegrationPlugin)
         
     # Install newer versions of libstdc++ to support C++11
+    file(GLOB LIBSTD_CPP_SO "/usr/lib/x86_64-linux-gnu/libstdc++.so.6*")
     install(
-        FILES
-            "/usr/lib/x86_64-linux-gnu/libstdc++.so.6"
-            "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.21"
+        FILES ${LIBSTD_CPP_SO}
         DESTINATION ${lib_dir})
 elseif(SYSTEM_MACOSX)
     install_qt_lib(MacExtras DBus)
