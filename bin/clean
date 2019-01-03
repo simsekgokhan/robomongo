@@ -7,17 +7,10 @@ source $BIN_DIR/common/setup $1
 cd $VARIANT_DIR && rm -rf $BUILD_DIR_NAME
 
 echo "----------------------"
-# sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-# sudo apt-get update
-# sudo apt-get install gcc-5 g++-5    
-# sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5
-echo "----------------------"
-echo "gcc -v"
-gcc -v
 
 echo 
-echo "sudo ls -l /usr/lib/x86_64-linux-gnu/libstdc++*"
-sudo ls -l /usr/lib/x86_64-linux-gnu/libstdc++*
+echo "mkdir -p build/release/package/"
+mkdir -p build/release/package/
 
 echo 
 echo "touch build/release/package/robo3t-1.3.0-linux-x86_64-3d37f2e.tar.gz"
