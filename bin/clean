@@ -32,9 +32,9 @@ echo
 echo "cp notes.txt build/release/package/"
 cp notes.txt build/release/package/
 
-echo 
-echo "ls -l build/release/package/"
-ls -l build/release/package/
+# echo 
+# echo "ls -l build/release/package/"
+# ls -l build/release/package/
 
 echo 
 echo "cd build/release/package"
@@ -43,5 +43,10 @@ cd build/release/package
 echo 
 echo "pwd"
 pwd
+
+echo 
+echo "ls -l"
+ls -l
+
 
 
