@@ -8,10 +8,17 @@ cd $VARIANT_DIR && rm -rf $BUILD_DIR_NAME
 
 # ------------------------------------------------
 
+echo 
+echo "gcc upgrade"
+sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+sudo apt-get update
+sudo apt-get install gcc-5 g++-5    
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5
+
 echo
 echo "strings /lib/x86_64-linux-gnu/libm.so.6 | grep GLIBC_"
 strings /lib/x86_64-linux-gnu/libm.so.6 | grep GLIBC_
-
+        
 echo 
 echo "gcc -v"
 gcc -v 
