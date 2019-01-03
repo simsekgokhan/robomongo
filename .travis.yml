@@ -24,11 +24,13 @@ deploy:
   file: "bin/notes*"
   draft: true
   overwrite: true
+  deploy:
+    skip_cleanup: true
   on:
     repo: simsekgokhan/robomongo    
   ## Deploy only if the build is a tagged build
-#   on:
-#      tags: true
+  # on:
+     # tags: true
     
 # end of file
 
