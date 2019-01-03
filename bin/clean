@@ -15,3 +15,7 @@ strings /lib/x86_64-linux-gnu/libm.so.6 | grep GLIBC_
 echo 
 echo "gcc -v"
 gcc -v 
+
+echo 
+echo "ldd --version"
+ldd --version
