@@ -21,8 +21,8 @@ deploy:
   api_key:
     secure: cNKJlqHkTNlrR7wsrBFyLuNIdFffdXzwunGjb6dwJPWHoELQHKP8FMQS3LFnWSNPFfbU+ryC7xx/QdLSpybxKBNAzDc0CuklOhGz2l3SMRVVo0mDIfK6FkER3D94JPj5+cErXGDN5yeFY5eZI0IEFGFAWtpkvxezmCuSbzMimHMmsdHlh8D1hcou48laRp/QeOkqB6PBwwEJaKaWPEt4gTaFJ56ryYhmt/3MsTvqRIGW5cubmLEJMS1+OjDgLgteCMrwpG6v6JFwraFUwh7lBYUuQwDlXIL5QaQp16wDjH0uD/yz0wKFJZ5KazdxlkNRffWFOxIJ8lcavl2fhLnrZSrSYPLy7HkPUyjvvEfi9+HmLB5AGm8ZIy1Sl0/HEZRtyVJkaXcQyq1UnnVTQ+qm6qVdAxIZ4ajYkiiVvu0RUcsrTUnwrWEBjLE9UvDFVfW2kVJbFfvFHHx2JmrANiscDDiJqhJJs6cVFXdBUVvT9PpdrruGH2Sdspp6EyZXCbR3RfSriBjPJaUbLjnTDvfhBochtQ+K3urEsZa9PXCo7bewsm8rHr/qGMCv44g0IbwgIMp852ELAk3hAfyOSs9BsQcGHzffqSAXSD4K01oLg407y+HzdKGkJjKJ6mp+iCLH5oBrgg+WWUySa5DBQHVmFAdTwhl+DOtDGL5OZeYg5Xc=
   file_glob: true
-  #file: "build/release/package/robo3t*"
-  file: "bin/build*"
+  file: "build/release/package/robo3t*"
+  # file: "bin/build*"
   draft: true
   overwrite: true
   on:
