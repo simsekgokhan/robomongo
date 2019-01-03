@@ -17,10 +17,6 @@ echo "pwd"
 pwd
 
 echo 
-echo "ls -l"
-ls -l
-
-echo 
 echo "mkdir -p build/release/package/"
 mkdir -p build/release/package/
 
@@ -32,21 +28,18 @@ echo
 echo "cp notes.txt build/release/package/"
 cp notes.txt build/release/package/
 
-# echo 
-# echo "ls -l build/release/package/"
-# ls -l build/release/package/
+echo 
+echo "ls -l build/release/package/"
+ls -l build/release/package/
 
 echo 
-echo "cd build/release/package"
-cd build/release/package
+echo "cp build/release/package/notes* bin/"
+cp build/release/package/notes* bin/
 
 echo 
-echo "pwd"
-pwd
+echo "ls -l bin/"
+ls -l bin/
 
-echo 
-echo "ls -l"
-ls -l
 
 
 
