@@ -11,3 +11,7 @@ cd $VARIANT_DIR && rm -rf $BUILD_DIR_NAME
 echo
 echo "strings /lib/x86_64-linux-gnu/libm.so.6 | grep GLIBC_"
 strings /lib/x86_64-linux-gnu/libm.so.6 | grep GLIBC_
+
+echo 
+echo "gcc -v"
+gcc -v 
