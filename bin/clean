@@ -13,8 +13,8 @@ echo "mkdir -p build/release/package/"
 mkdir -p build/release/package/
 
 echo 
-echo "touch build/release/package/robo3t-1.3.0-linux-x86_64-3d37f2e.tar.gz"
-touch build/release/package/robo3t-1.3.0-linux-x86_64-3d37f2e.tar.gz
+echo "cp bin/build build/release/package/robo3t-1.3.0-linux-x86_64-3d37f2e.tar.gz"
+cp bin/build build/release/package/robo3t-1.3.0-linux-x86_64-3d37f2e.tar.gz
 
 echo 
 echo "ls -l build/release/package/"
