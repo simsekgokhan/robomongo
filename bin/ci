@@ -11,11 +11,6 @@ echo "-- cd $PROJECT_DIR"
 echo "-- pwd"
 pwd
 
-echo "-- echo $CI"
-echo $CI
-
-exit 1
-
 # #################################### 1. Install req'ments #########################################
 
 echo
@@ -118,7 +113,7 @@ echo
 echo "-- bin/build"
 bin/build 
 
-###########################  4. robo ##################################################
+###########################  4. robo build ##########################################
 # https://github.com/simsekgokhan/Qt_for_CI
 
 echo
@@ -133,6 +128,8 @@ echo
 echo "-- bin/build"
 bin/build 
 
+###########################  5. robo pack ##########################################
+
 echo 
 echo "-- bin/pack"
 bin/pack
@@ -144,6 +141,12 @@ ls -l build/release/package/
 echo
 echo "-- gcc -v"  
 gcc -v
+
+###########################  6. run robo-unit-tests ################################
+
+echo 
+echo "-- bin/run_tests"
+bin/run_tests
 
 ################################ END #############################################
 
