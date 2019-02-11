@@ -11,6 +11,11 @@ echo "-- cd $PROJECT_DIR"
 echo "-- pwd"
 pwd
 
+echo "-- echo $CI"
+echo $CI
+
+exit 1
+
 # #################################### 1. Install req'ments #########################################
 
 echo
