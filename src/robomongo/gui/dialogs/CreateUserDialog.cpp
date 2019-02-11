@@ -74,7 +74,8 @@ namespace Robomongo
         _userPassEdit->setEchoMode(QLineEdit::Password);
         _userSourceLabel = new QLabel("UserSource:");
         _userSourceComboBox = new QComboBox();
-        _userSourceComboBox->addItems(QStringList() << "" << databases); //setText(QtUtils::toQString(user.userSource()));
+        _userSourceComboBox->addItems(QStringList() << databases); //setText(QtUtils::toQString(user.userSource()));    
+        _userSourceComboBox->setCurrentIndex(databases.indexOf(database));
         utils::setCurrentText(_userSourceComboBox, QtUtils::toQString(user.userSource()));
 
         QGridLayout *gridRoles = new QGridLayout();
@@ -195,10 +196,8 @@ namespace Robomongo
             if (username.empty() || pass.empty())
                 return;
 
-            std::string hash = MongoUtils::buildPasswordHash(username, pass);
-
             _user.setName(username);
-            _user.setPasswordHash(hash);
+            _user.setPassword(pass);
             _user.setReadOnly(_readOnlyCheckBox->isChecked());
         }
         else {
@@ -210,18 +209,8 @@ namespace Robomongo
             if (userSource.empty() && pass.empty())
                 return;
 
-            if (!userSource.empty() && !pass.empty()) {
-                QMessageBox::warning(this, "Invalid input", "The UserSource field and the Password field are mutually exclusive. The document cannot contain both.\n");
-                return;
-            }
-
-            std::string hash;
-            if (!pass.empty()) {
-                hash = MongoUtils::buildPasswordHash(username, pass);
-            }
-
-            _user.setPasswordHash(hash);
             _user.setName(username);        
+            _user.setPassword(pass);
             _user.setUserSource(userSource);
 
             MongoUser::RoleType roles;

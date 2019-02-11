@@ -105,6 +105,7 @@ if(SYSTEM_LINUX)
         QXcbIntegrationPlugin)
         
     # Install newer versions of libstdc++ to support C++11
+    # todo ci: 
     file(GLOB LIBSTD_CPP_SO "/usr/lib/x86_64-linux-gnu/libstdc++.so.6*")
     install(
         FILES ${LIBSTD_CPP_SO}

@@ -68,6 +68,24 @@ namespace Robomongo
         }
     }
 
+    void MongoWorker::restartReplicaSetConnection()
+    {
+        if (!_connSettings->hasEnabledPrimaryCredential())
+            return;
+
+        CredentialSettings *credentials = _connSettings->primaryCredential();
+        mongo::BSONObj authParams(mongo::BSONObjBuilder()
+            .append("user", credentials->userName())
+            .append("db", credentials->databaseName())
+            .append("pwd", credentials->userPassword())
+            .append("mechanism", credentials->mechanism())
+            .obj());
+
+        _dbclientRepSet.release();
+        if(mongo::DBClientBase *conn = getConnection(true).first)
+            conn->auth(authParams);
+    }
+
     void MongoWorker::keepAlive()
     {
         try {
@@ -151,30 +169,31 @@ namespace Robomongo
         auto errorCode = EventError::ErrorCode::Unknown;
 
         try {
-            mongo::DBClientBase *conn = getConnection(true);
+            auto const& connAndErrorStr = getConnection(true);
+            mongo::DBClientBase *conn = connAndErrorStr.first;           
             
             // --- Connection failed for single server & replica set (no member of the set is reachable)
             if (!conn) 
             {
                 auto errorReason = std::string("Connection failure: Unknown error.");
+                auto const& connErrorStr = connAndErrorStr.second;
 
-                if (_connSettings->sslSettings()->sslEnabled()) {
-                    // Note: Currently mongo-shell does not provide any interface to fetch actual error details
-                    // for some SSL connection failures that's why we are unable to show exact error here. 
-                    errorReason = "SSL tunnel failure: Network is unreachable or SSL connection rejected by server.";
-                }
+                if (_connSettings->sslSettings()->sslEnabled())
+                     errorReason = 
+                         "SSL tunnel failure: Network is unreachable or SSL connection rejected by server." + 
+                          (connErrorStr.empty() ? "" : " Reason: " + connErrorStr);
                 else {  // Non-SSL connections
                     if (_connSettings->isReplicaSet()) {
-                        errorReason = "No member of the set is reachable.";
+                        errorReason = "No member of the set is reachable." + 
+                                      (connErrorStr.empty() ? "" : " Reason: " + connErrorStr);
                         std::vector<std::pair<std::string, bool>> membersAndHealths;
-                        for (auto const& member : _connSettings->replicaSetSettings()->members()) {
+                        for (auto const& member : _connSettings->replicaSetSettings()->members())
                             membersAndHealths.push_back({ member, false });
-                        }
-                        repSetInfo.reset(new ReplicaSet("", mongo::HostAndPort(), membersAndHealths,
-                                                        "No member of the set is reachable."));
+                        
+                        repSetInfo.reset(new ReplicaSet("", mongo::HostAndPort(), membersAndHealths, errorReason));
                     }
                     else    // single server
-                        errorReason = "Network is unreachable.";                    
+                        errorReason = "Network is unreachable." + (connErrorStr.empty() ? "" : " Reason: " + connErrorStr);
                 }
                 resetGlobalSSLparams();
 
@@ -496,11 +515,19 @@ namespace Robomongo
     {
         try {
             boost::scoped_ptr<MongoClient> client(getClient());
+    
+            // Added after Mongo 4.0 due to connection problems after first edit/insert/remove operation
+            bool replicaSetConnectionWithAuth = false;
+            if (_connSettings->isReplicaSet()) {
+                restartReplicaSetConnection();  
+                if (_connSettings->hasEnabledPrimaryCredential())
+                    replicaSetConnectionWithAuth = true;
+            }
 
             if (event->overwrite())
-                client->saveDocument(event->obj(), event->ns());
+                client->saveDocument(event->obj(), event->ns(), replicaSetConnectionWithAuth);
             else
-                client->insertDocument(event->obj(), event->ns());
+                client->insertDocument(event->obj(), event->ns(), replicaSetConnectionWithAuth);
 
             client->done();
             reply(event->sender(), new InsertDocumentResponse(this));
@@ -527,7 +554,16 @@ namespace Robomongo
         try {
             boost::scoped_ptr<MongoClient> client(getClient());
 
-            client->removeDocuments(event->ns(), event->query(), (event->removeCount() == RemoveDocumentCount::ONE));
+            // Added after Mongo 4.0 due to connection problems after first edit/insert/remove operation
+            bool replicaSetConnectionWithAuth = false;
+            if (_connSettings->isReplicaSet()) {
+                restartReplicaSetConnection();
+                if (_connSettings->hasEnabledPrimaryCredential())
+                    replicaSetConnectionWithAuth = true;
+            }
+
+            client->removeDocuments(event->ns(), event->query(), replicaSetConnectionWithAuth, 
+                                    event->removeCount() == RemoveDocumentCount::ONE);
             client->done();
 
             reply(event->sender(), new RemoveDocumentResponse(this, event->removeCount(), event->index()));
@@ -838,7 +874,7 @@ namespace Robomongo
     {
         try {
             boost::scoped_ptr<MongoClient> client(getClient());
-            client->createUser(event->database(), event->user(), event->overwrite());
+            client->createUser(event->database(), event->user());
             client->done();
 
             reply(event->sender(), new CreateUserResponse(this, event->user().name()));
@@ -863,7 +899,7 @@ namespace Robomongo
     {
         try {
             boost::scoped_ptr<MongoClient> client(getClient());
-            client->dropUser(event->database(), event->id());
+            client->dropUser(event->database(), event->username());
             client->done();
 
             reply(event->sender(), new DropUserResponse(this, event->username()));
@@ -947,7 +983,7 @@ namespace Robomongo
         }
     }
 
-    mongo::DBClientBase *MongoWorker::getConnection(bool mayReturnNull /* = false */)
+    std::pair<mongo::DBClientBase*, std::string> MongoWorker::getConnection(bool mayReturnNull /* = false */)
     {
         configureSSL();
 
@@ -966,7 +1002,7 @@ namespace Robomongo
                         setName = connectAndGetReplicaSetName();
 
                     if (setName.empty())   // It is not possible to continue with empty set name
-                        return nullptr;
+                        return{ nullptr, "It is not possible to continue with empty set name" };
                 }
 
                 // Step-2: Try connect to replica set with set name
@@ -975,9 +1011,9 @@ namespace Robomongo
                                                      "robo3t", _mongoTimeoutSec));
                 
                 if (!_dbclientRepSet->connect()) 
-                    return nullptr;
+                    return{ nullptr, "Connect failed" };
             }
-            return _dbclientRepSet.get();
+            return { _dbclientRepSet.get(), ""};
         }
         else {  // connection to single server
             if (!_dbclient) {
@@ -985,17 +1021,17 @@ namespace Robomongo
                 // Connect timeout is fixed, but short, at 5 seconds (see headers for DBClientConnection)
                 _dbclient = DBClientConnection(new mongo::DBClientConnection(true, _mongoTimeoutSec));
 
-                mongo::Status status = _dbclient->connect(_connSettings->hostAndPort(), "robo3t");
+                mongo::Status const& status = _dbclient->connect(_connSettings->hostAndPort(), "robo3t");
                 if (!status.isOK() && mayReturnNull) 
-                    return nullptr;
+                    return{ nullptr, status.reason() };
             }
-            return _dbclient.get();
+            return{ _dbclient.get(), "" };
         }
     }
 
     MongoClient *MongoWorker::getClient()
     {
-        return new MongoClient(getConnection());
+        return new MongoClient(getConnection().first);
     }
 
     void MongoWorker::configureSSL()

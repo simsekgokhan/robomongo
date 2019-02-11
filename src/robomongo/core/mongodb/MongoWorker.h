@@ -140,6 +140,9 @@ namespace Robomongo
         virtual void timerEvent(QTimerEvent *);
 
     private:
+        // Added after Mongo 4.0 to fix connection failures seen after a first edit/add/remove doc. operation
+        void restartReplicaSetConnection();
+
         /**
          * @brief Send event to this MongoWorker
          */
@@ -148,7 +151,8 @@ namespace Robomongo
         DatabasesContainerType getDatabaseNamesSafe();
         std::string getAuthBase() const;
 
-        mongo::DBClientBase *getConnection(bool mayReturnNull = false);
+        // Returns a pair of DBClientBase* connection and error string
+        std::pair<mongo::DBClientBase*, std::string> getConnection(bool mayReturnNull = false);
         MongoClient *getClient();
 
         /**

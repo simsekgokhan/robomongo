@@ -48,6 +48,7 @@ namespace Robomongo
         void setScriptFocus();
         void showAutocompletion();
         void hideAutocompletion();
+        void setCurrentDatabase(const std::string &dbname);
         
         // Bring active tab's dock into front
         void bringDockToFront();
@@ -68,6 +69,7 @@ namespace Robomongo
         void openFile();
         void textChange();
         void showProgress();
+        void hideProgress();
 
         void handle(DocumentListLoadedEvent *event);
         void handle(ScriptExecutedEvent *event);
@@ -82,7 +84,6 @@ namespace Robomongo
         void changeShellTimeout();
 
     private:        
-        void hideProgress();
         void updateCurrentTab();
         void displayData(const std::vector<MongoShellResult> &results, bool empty);
 

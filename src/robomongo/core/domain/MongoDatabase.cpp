@@ -81,14 +81,14 @@ namespace Robomongo
         _bus->send(_server->worker(), new CopyCollectionToDiffServerRequest(this, server->worker(), sourceDatabase, collection, _name));
     }
 
-    void MongoDatabase::createUser(const MongoUser &user, bool overwrite)
+    void MongoDatabase::createUser(const MongoUser &user)
     {
-        _bus->send(_server->worker(), new CreateUserRequest(this, _name, user, overwrite));
+        _bus->send(_server->worker(), new CreateUserRequest(this, _name, user));
     }
 
-    void MongoDatabase::dropUser(const mongo::OID &id, std::string const& userName)
+    void MongoDatabase::dropUser(std::string const& userName)
     {
-        _bus->send(_server->worker(), new DropUserRequest(this, _name, id, userName));
+        _bus->send(_server->worker(), new DropUserRequest(this, _name, userName));
     }
 
     void MongoDatabase::createFunction(const MongoFunction &fun)
@@ -170,10 +170,10 @@ namespace Robomongo
     void MongoDatabase::handle(LoadFunctionsResponse *event)
     {
         if (event->isError()) {
+            _bus->publish(new MongoDatabaseFunctionsLoadedEvent(this, event->error()));
+
             if (_server->connectionRecord()->isReplicaSet()) // replica set
                 handleIfReplicaSetUnreachable(event);           
-            else // single server
-                _bus->publish(new MongoDatabaseFunctionsLoadedEvent(this, event->error()));
 
             genericEventErrorHandler(event, "Failed to refresh 'Functions'.", _bus, this);
             return;

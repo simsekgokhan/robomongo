@@ -90,62 +90,63 @@ namespace Robomongo
 
     std::vector<MongoUser> MongoClient::getUsers(const std::string &dbName)
     {
-        MongoNamespace ns(dbName, "system.users");
-        std::vector<MongoUser> users;
+        mongo::BSONObjBuilder cmd;
+        cmd.append("usersInfo", 1);
 
-        std::unique_ptr<mongo::DBClientCursor> cursor(_dbclient->query(ns.toString(), mongo::Query()));
+        mongo::BSONObj result;
+        if (!_dbclient->runCommand(dbName, cmd.done(), result)) {
+            std::string errStr = result.getStringField("errmsg");
+            if (errStr.empty())
+                errStr = "Failed to get error message.";
 
-        // Cursor may be NULL, it means we have connectivity problem
-        if (!cursor)
-            throw std::runtime_error("Network error while attempting to load list of users"/*, 0*/);
-
-        float ver = getVersion();
-        while (cursor->more()) {
-            mongo::BSONObj bsonObj = cursor->next();
-            MongoUser user(ver, bsonObj);
-            users.push_back(user);
+            throw std::runtime_error(errStr/*, 0*/);
         }
+
+        std::vector<MongoUser> users;
+        for (auto const& usr : result.getField("users").Array())
+            users.push_back(MongoUser(getVersion(), usr.embeddedObject()));
 
         return users;
     }
 
-    void MongoClient::createUser(const std::string &dbName, const MongoUser &user, bool overwrite)
+    void MongoClient::createUser(const std::string &dbName, const MongoUser &user)
     {
-        MongoNamespace ns(dbName, "system.users");
-        mongo::BSONObj obj = user.toBson();
-
-        if (!overwrite) {   // create new user
-            _dbclient->insert(ns.toString(), obj);
-        } 
-        else {  // update existing user
-            mongo::BSONElement id = obj.getField("_id");
-            mongo::BSONObjBuilder builder;
-            builder.append(id);
-            mongo::BSONObj bsonQuery = builder.obj();
-            mongo::Query query(bsonQuery);
-
-            _dbclient->update(ns.toString(), query, obj, true, false);
+        mongo::BSONObjBuilder cmd;
+        cmd.append("createUser", user.name());
+        cmd.append("pwd", user.password());
+        
+        mongo::BSONArrayBuilder roles;
+        auto const& rolesStrs = user.role();
+        for (auto const& roleStr : rolesStrs) {
+            mongo::BSONObjBuilder role;
+            role.append("role", roleStr).append("db", user.userSource());
+            roles.append(role.done());
         }
+        cmd.appendArray("roles", roles.done());
 
-        std::string errorStr = _dbclient->getLastError();
-        if (!errorStr.empty())
-            throw std::runtime_error(errorStr/*, 0*/);
+        mongo::BSONObj result;
+        if (!_dbclient->runCommand(dbName, cmd.done(), result)) {
+            std::string errStr = result.getStringField("errmsg");
+            if (errStr.empty())
+                errStr = "Failed to get error message.";
+   
+            throw std::runtime_error(errStr/*, 0*/);
+        }       
     }
 
-    void MongoClient::dropUser(const std::string &dbName, const mongo::OID &id)
+    void MongoClient::dropUser(const std::string &dbName, const std::string &user)
     {
-        MongoNamespace ns(dbName, "system.users");
+        mongo::BSONObjBuilder cmd;
+        cmd.append("dropUser", user);
 
-        mongo::BSONObjBuilder builder;
-        builder.append("_id", id);
-        mongo::BSONObj bsonQuery = builder.obj();
-        mongo::Query query(bsonQuery);
+        mongo::BSONObj result;
+        if (!_dbclient->runCommand(dbName, cmd.done(), result)) {
+            std::string errStr = result.getStringField("errmsg");
+            if (errStr.empty())
+                errStr = "Failed to get error message.";
 
-        _dbclient->remove(ns.toString(), query, true);
-
-        std::string errorStr = _dbclient->getLastError();
-        if (!errorStr.empty())
-            throw std::runtime_error(errorStr/*, 0*/);
+            throw std::runtime_error(errStr);
+        }
     }
 
     std::vector<MongoFunction> MongoClient::getFunctions(const std::string &dbName)
@@ -529,13 +530,14 @@ namespace Robomongo
         }
     }
 
-    void MongoClient::insertDocument(const mongo::BSONObj &obj, const MongoNamespace &ns)
+    void MongoClient::insertDocument(const mongo::BSONObj &obj, const MongoNamespace &ns, bool const replicaSetConnectionWithAuth)
     {
         _dbclient->insert(ns.toString(), obj);
-        checkLastErrorAndThrow(ns.databaseName());
+        if (!replicaSetConnectionWithAuth)
+            checkLastErrorAndThrow(ns.databaseName());
     }
 
-    void MongoClient::saveDocument(const mongo::BSONObj &obj, const MongoNamespace &ns)
+    void MongoClient::saveDocument(const mongo::BSONObj &obj, const MongoNamespace &ns, bool const replicaSetConnectionWithAuth)
     {
         mongo::BSONElement id = obj.getField("_id");
         mongo::BSONObjBuilder builder;
@@ -544,13 +546,16 @@ namespace Robomongo
         mongo::Query query(bsonQuery);
 
         _dbclient->update(ns.toString(), query, obj, true, false);
-        checkLastErrorAndThrow(ns.databaseName());
+        if(!replicaSetConnectionWithAuth)
+            checkLastErrorAndThrow(ns.databaseName());
     }
 
-    void MongoClient::removeDocuments(const MongoNamespace &ns, mongo::Query query, bool justOne /*= true*/)
+    void MongoClient::removeDocuments(const MongoNamespace &ns, mongo::Query query, bool const replicaSetConnectionWithAuth, 
+                                      bool justOne /*= true*/)
     {
         _dbclient->remove(ns.toString(), query, justOne);
-        checkLastErrorAndThrow(ns.databaseName());
+        if (!replicaSetConnectionWithAuth)
+            checkLastErrorAndThrow(ns.databaseName());
     }
 
     std::vector<MongoDocumentPtr> MongoClient::query(const MongoQueryInfo &info)

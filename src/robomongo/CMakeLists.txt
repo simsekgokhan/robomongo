@@ -232,10 +232,8 @@ endif()
 # Install
 include(RobomongoInstall)
 
-
 #
 # Tests targets (code below should be moved to separate file)
-#
 add_executable(tests WIN32 EXCLUDE_FROM_ALL app/main_test.cpp gui/editors/JSLexer.cpp)
 target_link_libraries(tests Qt5::Widgets qjson qscintilla mongodb Threads::Threads)
 target_include_directories(tests

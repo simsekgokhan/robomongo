@@ -18,18 +18,17 @@ namespace Robomongo
          */
         MongoUser(const float version);
 
-        mongo::OID id() const { return _id; }
+        std::string id() const { return _id; }
         std::string name() const { return _name; }
+        std::string password() const { return _password; }
         RoleType role() const { return _role; }
-        std::string passwordHash() const { return _passwordHash; }
 
         void setName(const std::string &name) { _name = name; }
+        void setPassword(const std::string &pwd) { _password = pwd; }
         void setRole(const RoleType &role) { _role = role; }
-        void setPasswordHash(const std::string &hash) { _passwordHash = hash; }
 
         std::string userSource() const { return _userSource; }
         void setUserSource(const std::string &source) { _userSource = source; }
-        mongo::BSONObj toBson() const;
         bool readOnly() const { return _readOnly; }
         void setReadOnly(bool readonly) { _readOnly = readonly; }
 
@@ -37,11 +36,11 @@ namespace Robomongo
         static const float minimumSupportedVersion;
     private:
         float _version;
-        mongo::OID _id;
         std::string _name;
         bool _readOnly;
         RoleType _role;
-        std::string _passwordHash;
+        std::string _password;
+        std::string _id;
         std::string _userSource;
     };
 }

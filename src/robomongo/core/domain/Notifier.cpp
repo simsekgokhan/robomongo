@@ -1,5 +1,8 @@
 #include "robomongo/core/domain/Notifier.h"
 
+#include <thread>
+#include <chrono>
+
 #include <QAction>
 #include <QClipboard>
 #include <QApplication>
@@ -15,6 +18,7 @@
 
 #include "robomongo/shell/db/ptimeutil.h"
 
+#include "robomongo/gui/MainWindow.h"
 #include "robomongo/gui/widgets/workarea/BsonTreeItem.h"
 #include "robomongo/gui/dialogs/DocumentTextEditor.h"
 #include "robomongo/gui/utils/DialogUtils.h"
@@ -221,12 +225,14 @@ namespace Robomongo
                                                                   RemoveDocumentCount::MULTI;
             _shell->server()->removeDocuments(query, _queryInfo._info._ns, removeCount, index);
             ++index;
+            mainWindow()->showQueryWidgetProgressBar();
         }
     }
 
     void Notifier::handle(InsertDocumentResponse *event)
     {
         if (event->isError()) { // Error
+            mainWindow()->hideQueryWidgetProgressBar();        
             if (_shell->server()->connectionRecord()->isReplicaSet()) {
                 // Insert document from tab results window (Notifier, OutputWindow widget)
                 if (EventError::SetPrimaryUnreachable == event->error().errorCode()) {
@@ -236,11 +242,12 @@ namespace Robomongo
             }
             else  // single server
                 QMessageBox::warning(NULL, "Database Error", QString::fromStdString(event->error().errorMessage()));
-            
+
             return;
         }
 
         // Success
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
         _shell->query(0, _queryInfo);
     }
 
@@ -250,8 +257,10 @@ namespace Robomongo
             if (!(event->removeCount == RemoveDocumentCount::MULTI && event->index > 0))
                 QMessageBox::warning(NULL, "Database Error", QString::fromStdString(event->error().errorMessage()));
        }
-       else // Success
-            _shell->query(0, _queryInfo);
+       else {   // Success
+           std::this_thread::sleep_for(std::chrono::milliseconds(100));
+           _shell->query(0, _queryInfo);
+       }
     }
 
     void Notifier::onCopyNameDocument()
@@ -299,6 +308,16 @@ namespace Robomongo
 
         QClipboard *clipboard = QApplication::clipboard();
         clipboard->setText(namesList.join("."));
+    }
+
+    MainWindow* Notifier::mainWindow() const
+    {
+        MainWindow* mainWindow;
+        for (auto wid : QApplication::topLevelWidgets()) {
+            if ((mainWindow = qobject_cast<MainWindow*>(wid)))
+                break;
+        }
+        return mainWindow;
     }
 
     void Notifier::handleDeleteCommand()
@@ -359,22 +378,20 @@ namespace Robomongo
         if (!documentItem)
             return;
 
-        mongo::BSONObj obj = documentItem->superRoot();
-
-        std::string str = BsonUtils::jsonString(obj, mongo::TenGen, 1,
-            AppRegistry::instance().settingsManager()->uuidEncoding(),
-            AppRegistry::instance().settingsManager()->timeZone());
+        std::string str = BsonUtils::jsonString(documentItem->superRoot(), mongo::TenGen, 1,
+                                                AppRegistry::instance().settingsManager()->uuidEncoding(),
+                                                AppRegistry::instance().settingsManager()->timeZone());
 
         const QString &json = QtUtils::toQString(str);
 
-        DocumentTextEditor editor(_queryInfo._info,
-            json, false, dynamic_cast<QWidget*>(_observer));
+        DocumentTextEditor editor(_queryInfo._info, json, false, dynamic_cast<QWidget*>(_observer));
 
         editor.setWindowTitle("Edit Document");
         int result = editor.exec();
 
         if (result == QDialog::Accepted) {
             _shell->server()->saveDocuments(editor.bsonObj(), _queryInfo._info._ns);
+            mainWindow()->showQueryWidgetProgressBar();
         }
     }
 
@@ -421,6 +438,7 @@ namespace Robomongo
         DocumentTextEditor::ReturnType obj = editor.bsonObj();
         for (DocumentTextEditor::ReturnType::const_iterator it = obj.begin(); it != obj.end(); ++it) {
             _shell->server()->insertDocument(*it, _queryInfo._info._ns);
+            mainWindow()->showQueryWidgetProgressBar();
         }
     }
 

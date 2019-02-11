@@ -35,7 +35,7 @@ More information for installing on Ubuntu:
 https://wiki.qt.io/Install_Qt_5_on_Ubuntu
 ```
 
-5. Download and Build OpenSSL (1.0.2o) - (explained below in section B)
+5. Download and Build OpenSSL (1.0.2o) - (explained below in section B) 
 
 B. Building Robo 3T and Dependencies
 -------------
@@ -73,12 +73,12 @@ cp libssl* libcrypto* lib/
 
 #### Step 2. Build Robo 3T Shell (fork of MongoDB)
 
-Clone Robo 3T Shell and checkout to `roboshell-v4.0` branch:
+Clone Robo 3T Shell and checkout to `roboshell-v4.0.4` branch:
 
   ```sh
   $ git clone https://github.com/paralect/robomongo-shell.git
   $ cd robomongo-shell
-  $ git branch // make sure it is "roboshell-v4.0"
+  $ git branch // make sure it is "roboshell-v4.0.4"
   ```
 
 Set special environment variable `ROBOMONGO_CMAKE_PREFIX_PATH` to point to a set of 
@@ -95,6 +95,12 @@ Separate directories by semicolon `;` (not colon):
     // Ubuntu example:
     $ export ROBOMONGO_CMAKE_PREFIX_PATH="/home/<user>/Qt5.x.x/5.x.x/gcc_64/;/home/<user>/robomongo-shell;/home/<user>/Downloads/openssl-1.0.xx"
 
+Install pip requirements
+
+```
+   // macOS / Linux assuming python = python 2.7
+   pip install --user -r etc/pip/dev-requirements.txt
+```
 
 Build Robo 3T Shell (in release mode by default):
 
