@@ -1,5 +1,5 @@
 **Travis CI:**   
-[![Build Status](https://travis-ci.org/gsimsekfb/calculator-for-testing.png)](https://travis-ci.org/gsimsekfb/calculator-for-testing)
+[![Build Status](https://travis-ci.com/simsekgokhan/robomongo.png)](https://travis-ci.com/simsekgokhan/robomongo)
 
 About Robo 3T
 ===============
