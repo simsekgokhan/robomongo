@@ -11,8 +11,6 @@ echo "-- cd $PROJECT_DIR"
 echo "-- pwd"
 pwd
 
-exit 1
-
 # #################################### 1. Install req'ments #########################################
 
 echo
