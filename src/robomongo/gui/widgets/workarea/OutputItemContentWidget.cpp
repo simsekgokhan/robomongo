@@ -25,8 +25,8 @@
 namespace Robomongo
 {
     OutputItemContentWidget::OutputItemContentWidget(ViewMode viewMode, MongoShell *shell, 
-                                                     const QString &text, double secs, 
-                                                     bool multipleResults, bool firstItem, bool lastItem, 
+                                                     const QString &text, double secs, bool multipleResults, 
+                                                     bool tabbedResults, bool firstItem, bool lastItem, 
                                                      AggrInfo aggrInfo, QWidget *parent) :
         BaseClass(parent),
         _textView(NULL),
@@ -51,15 +51,15 @@ namespace Robomongo
         _viewMode(viewMode),
         _aggrInfo(aggrInfo)
     {
-        setup(secs, multipleResults, firstItem, lastItem);
+        setup(secs, multipleResults, tabbedResults, firstItem, lastItem);
     }
 
     OutputItemContentWidget::OutputItemContentWidget(ViewMode viewMode, MongoShell *shell, 
                                                      const QString &type, 
                                                      const std::vector<MongoDocumentPtr> &documents, 
                                                      const MongoQueryInfo &queryInfo, double secs, 
-                                                     bool multipleResults, bool firstItem, 
-                                                     bool lastItem, AggrInfo aggrInfo,
+                                                     bool multipleResults, bool tabbedResults,
+                                                     bool firstItem, bool lastItem, AggrInfo aggrInfo,
                                                      QWidget *parent) :
         BaseClass(parent),
         _textView(NULL),
@@ -86,13 +86,14 @@ namespace Robomongo
         _viewMode(viewMode),
         _aggrInfo(aggrInfo)
     {
-        setup(secs, multipleResults, firstItem, lastItem);
+        setup(secs, multipleResults, tabbedResults, firstItem, lastItem);
     }
 
-    void OutputItemContentWidget::setup(double secs, bool multipleResults, bool firstItem, bool lastItem)
+    void OutputItemContentWidget::setup(double secs, bool multipleResults, bool tabbedResults,
+                                        bool firstItem, bool lastItem)
     {      
         setContentsMargins(0, 0, 0, 0);
-        _header = new OutputItemHeaderWidget(this, multipleResults, firstItem, lastItem);
+        _header = new OutputItemHeaderWidget(this, multipleResults, tabbedResults, firstItem, lastItem);
 
         if (_queryInfo._info.isValid()) {
             _header->setCollection(QtUtils::toQString(_queryInfo._info._ns.collectionName()));
@@ -183,14 +184,17 @@ namespace Robomongo
         info._skip = skip;
         info._batchSize = batchSize;
         _outputWidget->showProgress();
-        
+                
+        _shell->setScriptExecutable(true);
         if (_aggrInfo.isValid) {
             // Build original pipeline object, and append extra skip and limit for paging
             std::string pipelineModified = "[";
-            int i = 0;
-            while (!_aggrInfo.pipeline.getObjectField(std::to_string(i)).isEmpty()) {
-                pipelineModified.append(_aggrInfo.pipeline.getObjectField(std::to_string(i)).toString() + ",");
-                ++i;
+            for (int i = 0; ; i++) {
+                auto const obj = mongo::tojson(_aggrInfo.pipeline.getObjectField(std::to_string(i)));
+                if (obj.empty() || "{}" == obj)
+                    break;
+
+                pipelineModified.append(obj + ",");
             }
             pipelineModified.append("{$skip:" + std::to_string(skip) + "}, " +
                                     "{$limit:" + std::to_string(batchSize) + "}" + 

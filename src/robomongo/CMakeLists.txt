@@ -28,14 +28,11 @@ set(SOURCES
     core/EventBus.cpp
     core/KeyboardManager.cpp
     core/domain/MongoNamespace.cpp
-    core/domain/MongoUser.cpp
-    core/domain/MongoUser.cpp
     core/domain/MongoFunction.cpp
     core/domain/MongoUtils.cpp
     core/domain/MongoCollection.cpp
     core/domain/MongoCollectionInfo.cpp
     core/domain/MongoQueryInfo.cpp
-    core/domain/MongoShellResult.cpp
     core/domain/CursorPosition.cpp
     core/domain/ScriptInfo.cpp
     core/events/MongoEventsInfo.cpp
@@ -56,8 +53,10 @@ set(SOURCES
     core/mongodb/ReplicaSet.cpp
     core/settings/SettingsManager.cpp
     core/AppRegistry.cpp
-    utils/string_operations.cpp
+    utils/StringOperations.cpp
     utils/common.cpp
+    utils/SimpleCrypt.cpp
+    utils/RoboCrypt.cpp
 
     # Isolated Scope #3
     gui/GuiRegistry.cpp

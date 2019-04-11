@@ -598,7 +598,8 @@ namespace Robomongo
         _updateBar->setMovable(false);
 
         _toolbarsMenu->addAction(_execToolBar->toggleViewAction());
-        VERIFY(connect(_execToolBar->toggleViewAction(), SIGNAL(triggered(bool)), this, SLOT(onExecToolbarVisibilityChanged(bool))));
+        VERIFY(connect(_execToolBar->toggleViewAction(), SIGNAL(triggered(bool)), 
+                       this, SLOT(onExecToolbarVisibilityChanged(bool))));
 
         /* --- Temporarily disabling export/import feature
         // Export/Import Toolbar
@@ -624,7 +625,7 @@ namespace Robomongo
 
         createTabs();
         createStatusBar();
-        setWindowTitle("Robo 3T - " + QString(PROJECT_VERSION_SHORT) + " Beta");
+        setWindowTitle("Robo 3T - " + QString(PROJECT_VERSION_SHORT));
         setWindowIcon(GuiRegistry::instance().mainWindowIcon());
 
         QTimer::singleShot(0, this, SLOT(manageConnections()));       

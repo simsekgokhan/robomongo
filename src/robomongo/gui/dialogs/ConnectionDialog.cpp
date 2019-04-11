@@ -8,6 +8,7 @@
 #include <QApplication>
 #include <QDialogButtonBox>
 
+#include "robomongo/core/utils/QtUtils.h"
 #include "robomongo/gui/GuiRegistry.h"
 #include "robomongo/gui/dialogs/ConnectionAuthTab.h"
 #include "robomongo/gui/dialogs/ConnectionBasicTab.h"
@@ -17,7 +18,6 @@
 #include "robomongo/gui/dialogs/SSHTunnelTab.h"
 #include "robomongo/gui/dialogs/SSLTab.h"
 #include "robomongo/gui/dialogs/ConnectionDiagnosticDialog.h"
-#include "robomongo/core/utils/QtUtils.h"
 
 namespace Robomongo
 {
@@ -48,7 +48,7 @@ namespace Robomongo
 
         QTabWidget *tabWidget = new QTabWidget;
                 
-        _basicTab    = new ConnectionBasicTab(_connection);
+        _basicTab    = new ConnectionBasicTab(_connection, this);
         _authTab     = new ConnectionAuthTab(_connection);
         _advancedTab = new ConnectionAdvancedTab(_connection);
         _sshTab      = new SshTunnelTab(_connection);
@@ -68,8 +68,9 @@ namespace Robomongo
         _basicTab->setFocus();
         adjustSize();
 
-        // Set minimum width - adjustment after adding SSLTab
-        setMinimumWidth(550);
+#ifdef __APPLE__
+        setMinimumWidth(660);   // MacOS & Linux
+#endif
     }
 
     /**
@@ -77,9 +78,23 @@ namespace Robomongo
      */
     void ConnectionDialog::accept()
     {
-        if (validateAndApply()) {
+        if (validateAndApply())
             QDialog::accept();
-        }
+    }
+
+    void ConnectionDialog::setAuthTab(QString const& db, QString const& username, QString const& pwd)
+    {
+        _authTab->setAuthTab(db, username, pwd);
+    }
+
+    void ConnectionDialog::enableSslBasic()
+    {
+        _sslTab->enableSslBasic();
+    }
+
+    void ConnectionDialog::setDefaultDb(QString const& defaultDb)
+    {
+        _advancedTab->setDefaultDb(defaultDb);
     }
 
     bool ConnectionDialog::validateAndApply()
@@ -88,9 +103,7 @@ namespace Robomongo
         _advancedTab->accept();
 
         if (!_basicTab->accept() || !_sshTab->accept() || !_sslTab->accept())
-        {
             return false;
-        }
 
         return true;
     }

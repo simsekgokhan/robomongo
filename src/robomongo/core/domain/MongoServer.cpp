@@ -15,7 +15,7 @@
 #include "robomongo/core/utils/QtUtils.h"
 #include "robomongo/gui/MainWindow.h"
 #include "robomongo/utils/common.h"
-#include "robomongo/utils/string_operations.h"
+#include "robomongo/utils/StringOperations.h"
 
 #include <QApplication>
 
@@ -496,7 +496,9 @@ namespace Robomongo {
             if ((mainWindow = qobject_cast<MainWindow*>(wid)))
                 break;
         }
-        mainWindow->hideQueryWidgetProgressBar();
+
+        if(mainWindow)
+            mainWindow->hideQueryWidgetProgressBar();
     }
 
 }   // namespace Robomongo

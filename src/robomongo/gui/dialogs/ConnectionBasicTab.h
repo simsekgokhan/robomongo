@@ -15,13 +15,14 @@ QT_END_NAMESPACE
 namespace Robomongo
 {
     class ConnectionSettings;
+    class ConnectionDialog;
 
     class ConnectionBasicTab : public QWidget
     {
         Q_OBJECT
 
     public:
-        ConnectionBasicTab(ConnectionSettings *settings);
+        ConnectionBasicTab(ConnectionSettings *settings, ConnectionDialog *connectionDialog);
         bool accept();
 
     private Q_SLOTS:
@@ -30,6 +31,7 @@ namespace Robomongo
         void on_addButton_clicked();
         void on_removeButton_clicked();
         void on_replicaMemberItemEdit(QTreeWidgetItem* item, int column);
+        void on_srvButton_clicked();
 
     private:
         QLabel *_typeLabel;
@@ -49,10 +51,13 @@ namespace Robomongo
         QDialogButtonBox *_minusPlusButtonBox;
         QLabel *_setNameLabel;
         QLineEdit *_setNameEdit;
+        QLineEdit *_srvEdit;
+        QPushButton *_srvButton;
         QPushButton *_discoverButton;
         QLabel *_readPrefLabel;
         QComboBox *_readPreference;
 
         ConnectionSettings *const _settings;
+        ConnectionDialog *_connectionDialog;
     };
 }

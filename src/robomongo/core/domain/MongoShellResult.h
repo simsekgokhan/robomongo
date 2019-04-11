@@ -5,19 +5,37 @@
 
 namespace Robomongo
 {
+    /* --------------  MongoShellResult Class --------- */
     class MongoShellResult
     {
     public:
         typedef std::vector<MongoDocumentPtr> MongoDocumentPtrContainerType;
-        MongoShellResult(const std::string &type, const std::string &response, 
-                         const MongoDocumentPtrContainerType &documents,
-                         const MongoQueryInfo &queryInfo, qint64 elapsedms,
-                         AggrInfo aggrInfo = AggrInfo());
+        MongoShellResult(
+            const std::string &type, const std::string &response,
+            const MongoDocumentPtrContainerType &documents,
+            const MongoQueryInfo &queryInfo, const std::string &statement,
+            qint64 elapsedms, AggrInfo aggrInfo = AggrInfo()) :
+            _type(type),
+            _response(response),
+            _documents(documents),
+            _queryInfo(queryInfo),
+            _statement(statement),
+            _elapsedms(elapsedms),
+            _aggrInfo(aggrInfo)
+        { }
 
         std::string response() const { return _response; }
         std::string type() const { return _type; }
         MongoDocumentPtrContainerType documents() const { return _documents; }
         MongoQueryInfo queryInfo() const { return _queryInfo; }
+        std::string statement() const { return _statement; }
+        std::string statementShort() const {
+            std::size_t const LEN = _statement.size() < 10 ? _statement.size() : 10;
+            std::string statementShort { _statement, 0, LEN };
+            statementShort.append((_statement.size() > 10) ? ".." : "");
+            return statementShort;
+        }
+
         qint64 elapsedMs() const { return _elapsedms; }
         AggrInfo const& aggrInfo() const { return _aggrInfo; }
 
@@ -26,19 +44,29 @@ namespace Robomongo
         std::string _response;
         MongoDocumentPtrContainerType _documents;
         MongoQueryInfo _queryInfo;
+        std::string const _statement;
         qint64 _elapsedms;
         AggrInfo _aggrInfo = AggrInfo();
     };
 
+    /* --------------  MongoShellExecResult Class --------- */
     class MongoShellExecResult
     {
     public:
         MongoShellExecResult() { }
 
-        MongoShellExecResult(const std::vector<MongoShellResult> &results,
-                             const std::string &currentServer, bool isCurrentServerValid,
-                             const std::string &currentDatabase, bool isCurrentDatabaseValid,
-                             bool timeoutReached = false);
+        MongoShellExecResult(
+            const std::vector<MongoShellResult> &results,
+            const std::string &currentServer, bool isCurrentServerValid,
+            const std::string &currentDatabase, bool isCurrentDatabaseValid,
+            bool timeoutReached = false) :
+            _results(results),
+            _currentServer(currentServer),
+            _currentDatabase(currentDatabase),
+            _isCurrentServerValid(isCurrentServerValid),
+            _isCurrentDatabaseValid(isCurrentDatabaseValid),
+            _timeoutReached(timeoutReached)
+        { }
 
         MongoShellExecResult(bool error, std::string const& errorMsg = "", bool timeoutReached = false) : 
             _error(error), _errorMessage(errorMsg), _timeoutReached(timeoutReached) { }

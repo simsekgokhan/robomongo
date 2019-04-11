@@ -12,17 +12,22 @@
 #include <QTreeWidgetItem>
 #include <QMessageBox>
 #include <QDialogButtonBox>
-
+#include <QApplication>
+#include <QDesktopWidget>
 
 #include "robomongo/core/utils/QtUtils.h"
 #include "robomongo/core/settings/ConnectionSettings.h"
 #include "robomongo/core/settings/ReplicaSetSettings.h"
+#include "robomongo/gui/dialogs/ConnectionDialog.h"
 #include "robomongo/gui/GuiRegistry.h"
+#include "robomongo/gui/utils/GuiConstants.h"
+
+#include "mongo/client/mongo_uri.h"
 
 namespace Robomongo
 {
-    ConnectionBasicTab::ConnectionBasicTab(ConnectionSettings *settings) :
-        _settings(settings)
+    ConnectionBasicTab::ConnectionBasicTab(ConnectionSettings *settings, ConnectionDialog *connectionDialog) :
+        _settings(settings), _connectionDialog(connectionDialog)
     {
         _typeLabel = new QLabel("Type:");
         _connectionType = new QComboBox;
@@ -35,7 +40,6 @@ namespace Robomongo
         _connectionName = new QLineEdit(QtUtils::toQString(_settings->connectionName()));
         _connInfoLabel = new QLabel("Choose any connection name that will help you to identify this connection.");
         _connInfoLabel->setWordWrap(true);
-        _connInfoLabel->setContentsMargins(0, -2, 0, 20);
 
         _addressLabel = new QLabel("Address:");
         _serverAddress = new QLineEdit(QtUtils::toQString(_settings->serverHost()));
@@ -46,7 +50,6 @@ namespace Robomongo
         _serverPort->setValidator(new QRegExpValidator(rx, this)); 
         _addInfoLabel = new QLabel("Specify host and port of MongoDB server. Host can be either IPv4, IPv6 or domain name.");
         _addInfoLabel->setWordWrap(true);
-        _addInfoLabel->setContentsMargins(0, -2, 0, 20);
 
         _membersLabel = new QLabel("Members:");
         _membersLabel->setFixedWidth(_membersLabel->sizeHint().width());
@@ -70,7 +73,7 @@ namespace Robomongo
                 }
             }
             // To fix strange MAC alignment issue
-#ifndef _WIN32
+#ifdef __APPLE__
             auto lineHeight = _members->fontMetrics().height();
             _members->setFixedHeight(lineHeight * 8);
 #endif
@@ -99,41 +102,62 @@ namespace Robomongo
         _minusPlusButtonBox->addButton(_removeButton, QDialogButtonBox::NoRole);
         _minusPlusButtonBox->addButton(_addButton, QDialogButtonBox::NoRole);
 #endif
-
         _setNameLabel = new QLabel("Set Name:<br><i><font color=\"gray\">(Optional)</font></i>");
         _setNameEdit = new QLineEdit(QString::fromStdString(_settings->replicaSetSettings()->setNameUserEntered()));
         auto _optionalLabel = new QLabel("<i><font color=\"gray\">(Optional)</font></i>");
-        
-        auto connectionLayout = new QGridLayout;
-        connectionLayout->setVerticalSpacing(10);
-        connectionLayout->setAlignment(Qt::AlignTop);
-        connectionLayout->addWidget(_typeLabel,                     1, 0);
-        connectionLayout->addWidget(_connectionType,                1, 1, 1, 3);
-        connectionLayout->addWidget(new QLabel(""),                 2, 0);
-        connectionLayout->addWidget(_nameLabel,                     3, 0);
-        connectionLayout->addWidget(_connectionName,                3, 1, 1, 3);
-        connectionLayout->addWidget(_connInfoLabel,                 4, 1, 1, 3);
-        connectionLayout->addWidget(_addressLabel,                  5, 0);
-        connectionLayout->addWidget(_serverAddress,                 5, 1);
-        connectionLayout->addWidget(_colon,                         5, 2);
-        connectionLayout->addWidget(_serverPort,                    5, 3);
-        connectionLayout->addWidget(_addInfoLabel,                  6, 1, 1, 3);
-        connectionLayout->addWidget(_membersLabel,                  7, 0, Qt::AlignTop);
-        connectionLayout->addWidget(_members,                       7, 1, 1, 3);
-        connectionLayout->addWidget(_minusPlusButtonBox,            8, 3, Qt::AlignRight | Qt::AlignTop);
-        connectionLayout->addWidget(new QLabel(""),                 9, 0);
-        connectionLayout->addWidget(_setNameLabel,                  10, 0/*,  Qt::AlignBottom*/);
-        connectionLayout->addWidget(_setNameEdit,                   10, 1, 1, 3, Qt::AlignTop);
-        //connectionLayout->addWidget(_optionalLabel,                 11, 1, 1, 3, Qt::AlignLeft | Qt::AlignTop);
-        connectionLayout->addWidget(new QLabel(""),                 12, 0);
+
+        auto fakeSpacer = new QLabel("");
+        auto hline = new QFrame();
+        hline->setFrameShape(QFrame::HLine);
+        hline->setFrameShadow(QFrame::Sunken);
+        _srvEdit = new QLineEdit();
+        _srvEdit->setPlaceholderText("Import connection details from MongoDB SRV connection string");
+        _srvButton = new QPushButton("From SRV");
+#ifdef _WIN32
+        _srvButton->setMaximumHeight(HighDpiConstants::WIN_HIGH_DPI_BUTTON_HEIGHT);
+        _srvButton->setMaximumWidth(60);
+#else   // MacOS
+        _srvButton->setMaximumHeight(HighDpiConstants::MACOS_HIGH_DPI_BUTTON_HEIGHT);   
+        _srvButton->setMaximumWidth(90);
+#endif        
+        VERIFY(connect(_srvButton, SIGNAL(clicked()), this, SLOT(on_srvButton_clicked())));
+
+        auto connLayout = new QGridLayout;
+        connLayout->setVerticalSpacing(8);
+        connLayout->setAlignment(Qt::AlignTop);
+        connLayout->addWidget(_typeLabel,                     1, 0);
+        connLayout->addWidget(_connectionType,                1, 1, 1, 3);
+        connLayout->addWidget(_nameLabel,                     3, 0);
+        connLayout->addWidget(_connectionName,                3, 1, 1, 3);
+        connLayout->addWidget(_addressLabel,                  5, 0);
+        connLayout->addWidget(_serverAddress,                 5, 1);
+        connLayout->addWidget(_colon,                         5, 2);
+        connLayout->addWidget(_serverPort,                    5, 3);
+        connLayout->addWidget(_addInfoLabel,                  6, 1, 1, 3);
+        connLayout->addWidget(_membersLabel,                  7, 0, Qt::AlignTop);
+        connLayout->addWidget(_members,                       7, 1, 1, 3);
+        connLayout->addWidget(_minusPlusButtonBox,            8, 3, Qt::AlignRight | Qt::AlignTop);
+        connLayout->addWidget(_setNameLabel,                  9, 0,  Qt::AlignTop);
+        connLayout->addWidget(_setNameEdit,                   9, 1, 1, 3, Qt::AlignTop);
+        connLayout->addWidget(fakeSpacer,                    10, 0);
+        connLayout->addWidget(hline,                         11, 0, 1, 4);
+        connLayout->addWidget(_srvButton,                    13, 0);
+        connLayout->addWidget(_srvEdit,                      13, 1, 1, 3);
+
+        connLayout->setRowStretch(10, 1);        
+#ifdef __APPLE__
+        connLayout->setRowMinimumHeight(11, 20);
+#endif
 
         auto mainLayout = new QVBoxLayout;
-        mainLayout->addLayout(connectionLayout);
+        mainLayout->addLayout(connLayout);
         setLayout(mainLayout);
+#ifdef __APPLE__
+        mainLayout->setContentsMargins(-1, -1, -1, 10);
+#endif
 
         _connectionName->setFocus();
-        on_ConnectionTypeChange(_connectionType->currentIndex());
-
+        on_ConnectionTypeChange(_connectionType->currentIndex());        
     }
 
     bool ConnectionBasicTab::accept()
@@ -289,5 +313,40 @@ namespace Robomongo
             str += ":27017";
 
         item->setText(0, str);
+    }
+
+    void ConnectionBasicTab::on_srvButton_clicked()
+    {
+        QString srvStr = _srvEdit->text().simplified();
+        srvStr.replace(" ", "");
+        auto const statusWithMongoURI = mongo::MongoURI::parse(srvStr.toStdString());
+        if (!statusWithMongoURI.isOK()) {
+            QMessageBox errorBox;
+            errorBox.critical(this, "Error", ("MongoDB SRV:\n" + statusWithMongoURI.getStatus().toString()).c_str());
+            errorBox.show();
+            return;
+        }
+        auto const mongoUri = statusWithMongoURI.getValue();
+        auto const db = QString::fromStdString(mongoUri.getDatabase());        
+        auto const user = QString::fromStdString(mongoUri.getUser());
+        auto const pwd = QString::fromStdString(mongoUri.getPassword());
+        auto const authDb = QString::fromStdString(mongoUri.getAuthenticationDatabase());
+
+        // Basic (this) Tab
+        _members->clear();
+        _connectionType->setCurrentIndex(1);    // Switch to Replica Set
+        for (auto const& hostAndPort : mongoUri.getServers()) {
+            auto host = QString::fromStdString(hostAndPort.host());
+            host.endsWith('.') ? host.remove(host.size()-1, 1) : "no-op";
+            auto const newHostAndPort = host + ':' + QString::number(hostAndPort.port());
+            auto item = new QTreeWidgetItem;
+            item->setText(0, newHostAndPort);
+            item->setFlags(item->flags() | Qt::ItemIsEditable);
+            _members->addTopLevelItem(item);
+        }
+        _setNameEdit->setText(QString::fromStdString(mongoUri.getSetName()));        
+        _connectionDialog->setAuthTab(authDb, user, pwd);   // Auth Tab        
+        _connectionDialog->enableSslBasic();    // SSL Tab        
+        _connectionDialog->setDefaultDb(db);    // Advanced Tab
     }
 }

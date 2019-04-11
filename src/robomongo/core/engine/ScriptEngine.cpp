@@ -125,6 +125,10 @@ namespace Robomongo
         std::string esprima = loadFile(":/robomongo/scripts/esprima.js", true);
         _scope->exec(esprima, "(esprima)", false, true, true);
 
+        // UUID helpers
+        std::string uuidhelpers = loadFile(":/robomongo/scripts/uuidhelpers.js", true);
+        _scope->exec(uuidhelpers, "(uuidhelpers)", false, true, true);
+
         // Enable verbose shell reporting
         _scope->exec("_verboseShell = true;", "(verboseShell)", false, false, false);
 
@@ -365,7 +369,6 @@ namespace Robomongo
             ;
 
         _scope->exec(script, "(getresultinfo)", false, false, false);
-
         bool const isQuery = _scope->getBoolean("__robomongoQuery");
         bool const isAggregate = _scope->getBoolean("__robomongoIsAggregate");
 
@@ -384,9 +387,9 @@ namespace Robomongo
 
             bool special = _scope->getBoolean("__robomongoSpecial");
 
-            MongoQueryInfo info = MongoQueryInfo(CollectionInfo(serverAddress, dbName, collectionName),
-                                       query, fields, limit, skip, batchSize, options, special);
-            return MongoShellResult(type, output, objects, info, elapsedms);
+            MongoQueryInfo const info{ CollectionInfo(serverAddress, dbName, collectionName),
+                                       query, fields, limit, skip, batchSize, options, special };
+            return MongoShellResult(type, output, objects, info, statement, elapsedms);
         }
         else if (isAggregate) {
             std::string const serverAddress = getString("__robomongoServerAddress");
@@ -403,10 +406,9 @@ namespace Robomongo
             int const resultIndex = aggrInfo.isValid ? aggrInfo.resultIndex : -1;
 
             AggrInfo const newAggrInfo { collectionName, skip, batchSize, origPipeline, options, resultIndex };
-            return MongoShellResult(type, output, objects, MongoQueryInfo(), elapsedms, newAggrInfo);
+            return MongoShellResult(type, output, objects, MongoQueryInfo(), statement, elapsedms, newAggrInfo);
         }
-
-        return MongoShellResult(type, output, objects, MongoQueryInfo(), elapsedms);
+        return MongoShellResult(type, output, objects, MongoQueryInfo(), statement, elapsedms);
     }
 
     MongoShellExecResult ScriptEngine::prepareExecResult(const std::vector<MongoShellResult> &results, 

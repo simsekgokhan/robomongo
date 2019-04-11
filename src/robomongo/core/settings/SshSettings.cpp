@@ -1,6 +1,7 @@
 #include "robomongo/core/settings/SshSettings.h"
 
 #include "robomongo/core/utils/QtUtils.h"
+#include "robomongo/utils/RoboCrypt.h"
 
 namespace Robomongo
 {
@@ -23,10 +24,12 @@ namespace Robomongo
         map.insert("host", QtUtils::toQString(host()));
         map.insert("port", port());
         map.insert("userName", QtUtils::toQString(userName()));
-        map.insert("userPassword", QtUtils::toQString(userPassword()));
+        map.insert("userPasswordEncrypted", userPassword().empty() ? "" : 
+                                            QtUtils::toQString(RoboCrypt::encrypt(userPassword())));
         map.insert("privateKeyFile", QtUtils::toQString(privateKeyFile()));
         map.insert("publicKeyFile", QtUtils::toQString(publicKeyFile()));
-        map.insert("passphrase", QtUtils::toQString(passphrase()));
+        map.insert("passphraseEncrypted", passphrase().empty() ? "" : 
+                                          QtUtils::toQString(RoboCrypt::encrypt(passphrase())));
         map.insert("method", QtUtils::toQString(authMethod()));
         map.insert("enabled", enabled());
         map.insert("askPassword", askPassword());
@@ -37,10 +40,22 @@ namespace Robomongo
         setHost(QtUtils::toStdString(map.value("host").toString()));
         setPort(map.value("port").toInt());
         setUserName(QtUtils::toStdString(map.value("userName").toString()));
-        setUserPassword(QtUtils::toStdString(map.value("userPassword").toString()));
+
+        // From version Robo 1.3 "userPasswordEncrypted" is used instead of "userPassword" in config. file
+        if (map.contains("userPassword")) // Robo 1.2 and below
+            setUserPassword((map.value("userPassword").toString().toStdString()));
+        else if (map.contains("userPasswordEncrypted")) // From Robo 1.3
+            setUserPassword(RoboCrypt::decrypt((map.value("userPasswordEncrypted").toString().toStdString())));
+
         setPrivateKeyFile(QtUtils::toStdString(map.value("privateKeyFile").toString()));
         setPublicKeyFile(QtUtils::toStdString(map.value("publicKeyFile").toString()));
-        setPassphrase(QtUtils::toStdString(map.value("passphrase").toString()));
+
+        // From version Robo 1.3 "passphraseEncrypted" is used instead of "passphrase" in config. file
+        if (map.contains("passphrase")) // Robo 1.2 and below
+            setPassphrase((map.value("passphrase").toString().toStdString()));
+        else if (map.contains("passphraseEncrypted")) // From Robo 1.3
+            setPassphrase(RoboCrypt::decrypt((map.value("passphraseEncrypted").toString().toStdString())));
+
         setAuthMethod(QtUtils::toStdString(map.value("method").toString()));
         setEnabled(map.value("enabled").toBool());
         setAskPassword(map.value("askPassword").toBool());

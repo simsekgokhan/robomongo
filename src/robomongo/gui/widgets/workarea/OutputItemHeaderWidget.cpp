@@ -29,10 +29,12 @@ namespace
 namespace Robomongo
 {
 
-    OutputItemHeaderWidget::OutputItemHeaderWidget(OutputItemContentWidget *outputItemContentWidget, bool multipleResults, 
-                                                   bool firstItem, bool lastItem, QWidget *parent) :
+    OutputItemHeaderWidget::OutputItemHeaderWidget(
+            OutputItemContentWidget *outputItemContentWidget, bool multipleResults, 
+            bool tabbedResults, bool firstItem, bool lastItem, QWidget *parent) :
         QFrame(parent),
-        _maxButton(nullptr), _dockUndockButton(nullptr), _maximized(false), _multipleResults(multipleResults), 
+        _maxButton(nullptr), _dockUndockButton(nullptr), _maximized(false), 
+        _multipleResults(multipleResults), 
         _firstItem(firstItem), _lastItem(lastItem), _orientation(Qt::Vertical)
     {
         setContentsMargins(5, 0, 0, 0);
@@ -78,7 +80,7 @@ namespace Robomongo
         _customButton->setCheckable(true);
 
         // Create maximize button only if there are multiple results
-        if (_multipleResults) {
+        if (_multipleResults && !tabbedResults) {
             _maxButton = new QPushButton;
             _maxButton->setIcon(GuiRegistry::instance().maximizeIcon());
             _maxButton->setToolTip("Maximize this output result (double-click on result's header)");
@@ -111,9 +113,12 @@ namespace Robomongo
         _paging->hide();
 
         QHBoxLayout *layout = new QHBoxLayout();
+#ifdef __APPLE__
+        layout->setContentsMargins(2, 8, 5, 1);
+#else  
         layout->setContentsMargins(2, 0, 5, 1);
+#endif
         layout->setSpacing(0);
-
         layout->addWidget(_collectionIndicator);
         layout->addWidget(_timeIndicator);
         QSpacerItem *hSpacer = new QSpacerItem(2000, 24, QSizePolicy::Preferred, QSizePolicy::Minimum);
@@ -140,9 +145,8 @@ namespace Robomongo
         if (outputItemContentWidget->isTextModeSupported())
             layout->addWidget(_textButton, 0, Qt::AlignRight);
 
-        if (_multipleResults) {
+        if (_multipleResults)
             layout->addWidget(_maxButton, 0, Qt::AlignRight);
-        }
 
         layout->addSpacing(3);
         _verticalLine = createVerticalLine();
@@ -153,13 +157,15 @@ namespace Robomongo
         setLayout(layout);
 
         // Update dock/undock button visibility
-        if (_multipleResults) {
+        if (_multipleResults)
             updateDockButtonOnToggleOrientation();
-        }
         else {
             _verticalLine->setVisible(true);
             _dockUndockButton->setVisible(true);
         }
+      
+        if(tabbedResults)
+            setStyleSheet("background-color: white");
     }
 
     void OutputItemHeaderWidget::mouseDoubleClickEvent(QMouseEvent *)
@@ -251,9 +257,8 @@ namespace Robomongo
     void OutputItemHeaderWidget::maximizeMinimizePart()
     {
         // No maximize/minimize behaviour if there is only one query result
-        if (!_multipleResults) {
+        if (!_multipleResults)
             return;
-        }
 
         if (_maximized) {   // restoring original size
             emit restoredSize();

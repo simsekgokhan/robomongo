@@ -25,7 +25,7 @@
 #include "robomongo/core/utils/BsonUtils.h"
 #include "robomongo/core/utils/Logger.h"
 #include "robomongo/core/utils/QtUtils.h"
-#include "robomongo/utils/string_operations.h"
+#include "robomongo/utils/StringOperations.h"
 
 namespace Robomongo
 {
@@ -260,7 +260,7 @@ namespace Robomongo
             // If we do not have databases, it means that we are unable to
             // execute "listdatabases" command and we have nothing to show.
             if (dbNames.size() == 0)
-                throw std::runtime_error("Failed to execute \"listdatabases\" command."/*, 0*/);
+                throw std::runtime_error("Failed to execute \"listdatabases\" command.");
 
             if (!_connSettings->isReplicaSet())
                 init(); // Init MongoWorker for single server (for replica set connections early init is used)
@@ -650,6 +650,9 @@ namespace Robomongo
                         _scriptEngine->init(_isLoadMongoRcJs, replicaSetInfo.primary.toString(),
                                             _connSettings->defaultDatabase());
                         result = _scriptEngine->exec(event->script, _connSettings->defaultDatabase());
+                        if(result.error()) 
+                            reply(event->sender(),
+                                new ExecuteScriptResponse(this, EventError(result.errorMessage())));
                     }
                 }
                 else { // single server
@@ -705,7 +708,6 @@ namespace Robomongo
         std::string dbname = event->database();
         try {
             boost::scoped_ptr<MongoClient> client(getClient());
-            //remove_if(dbname.begin(), dbname.end(), isspace);
             client->createDatabase(dbname);
 
             // Insert to list of created database. Read docs for this hashset in the header
@@ -927,7 +929,7 @@ namespace Robomongo
                 auto const cmd = "db.system.js.save(" + event->function().toBson().toString() + ')';
                 MongoShellExecResult const& result = _scriptEngine->exec(cmd, event->database());
                 if (result.error())
-                    throw std::runtime_error(result.errorMessage()/*, 0*/);
+                    throw std::runtime_error(result.errorMessage());
             }
             else {
                 boost::scoped_ptr<MongoClient> client(getClient());
@@ -958,7 +960,7 @@ namespace Robomongo
                 auto const cmd = "db.system.js.remove( { _id : \"" + event->functionName() + "\" } )";
                 MongoShellExecResult const& result = _scriptEngine->exec(cmd, event->database());
                 if (result.error())
-                    throw std::runtime_error(result.errorMessage()/*, 0*/);
+                    throw std::runtime_error(result.errorMessage());
             }
             else {
                 boost::scoped_ptr<MongoClient> client(getClient());
