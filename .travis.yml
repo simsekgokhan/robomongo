@@ -4,7 +4,8 @@ os:
   # - windows
 
 # dist: xenial
-dist: trusty
+# dist: trusty
+dist: precise 
 sudo: require
 language: cpp
 
