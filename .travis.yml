@@ -3,9 +3,8 @@ os:
   # - osx
   # - windows
 
-# dist: xenial
+dist: xenial
 # dist: trusty
-dist: precise 
 sudo: require
 language: cpp
 
