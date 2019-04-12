@@ -24,6 +24,13 @@ cd $PROJECT_DIR
 # sudo apt-get install gcc-5 g++-5    
 # sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5
 
+sudo apt-get install cppcheck
+echo
+echo "-- cppcheck --version"  
+cppcheck --version
+exit 1
+
+
 echo
 echo "-- gcc -v"  
 gcc -v
