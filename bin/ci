@@ -25,12 +25,12 @@ cd $PROJECT_DIR
 # sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5
 
 echo
-echo "sudo apt-get update"
-sudo apt-get update
-
-echo
-echo "-- sudo apt-get install cppcheck"  
-sudo apt-get install cppcheck
+echo "-- Download and install cppcheck-1.87 (Feb-2019)..."  
+wget https://github.com/danmar/cppcheck/archive/1.87.tar.gz
+tar -xzf 1.87.tar.gz 
+cd cppcheck-1.87/
+make -j2
+sudo make install
 echo "-- cppcheck --version"  
 cppcheck --version
 exit 1
