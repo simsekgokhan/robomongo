@@ -29,8 +29,9 @@ echo "-- cppcheck --version"
 cppcheck --version
 
 echo
-echo "-- cppcheck --enable=all --std=c++11 src/robomongo/utils/RoboCrypt_test.cpp: "  
-cppcheck --enable=all --std=c++11 src/robomongo/utils/RoboCrypt_test.cpp
+echo " ************ Static code analysis ************* "
+echo "-- cppcheck --enable=all --std=c++11 src/robomongo/utils/: "  
+cppcheck --enable=all --std=c++11 src/robomongo/utils/
 
 exit 1
 # ----------------
