@@ -17,6 +17,20 @@ echo
 echo "---- 1) 1. Install req'ments"
 cd $PROJECT_DIR
 
+# ----------------
+echo
+echo "-- apt-get install cppcheck"
+sudo apt-get install cppcheck
+echo "-- cppcheck --version"  
+cppcheck --version
+
+echo
+echo "-- cppcheck --enable=all --std=c++11 src/robomongo/utils/RoboCrypt_test.cpp: "  
+cppcheck --enable=all --std=c++11 src/robomongo/utils/RoboCrypt_test.cpp
+
+exit 1
+# ----------------
+
 # echo
 # echo "-- apt-get install gcc-5 g++-5"
 # sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
@@ -24,30 +38,30 @@ cd $PROJECT_DIR
 # sudo apt-get install gcc-5 g++-5    
 # sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5
 
-# -----------------
+## ----------------- Not working: 
+##                   error: cppcheck: Failed to load library configuration file 'std.cfg'. File not found
+#
+# echo
+# echo "-- Download and install cppcheck-1.87 (Feb-2019)..."  
+# wget https://github.com/danmar/cppcheck/archive/1.87.tar.gz
+# tar -xzf 1.87.tar.gz 
+# cd cppcheck-1.87/
+# make SRCDIR=build CFGDIR=cfg HAVE_RULES=yes CXXFLAGS="-O2 -DNDEBUG -Wall -Wno-sign-compare -Wno-unused-function"
+# sudo make install
+# echo "-- cppcheck --version"  
+# cppcheck --version
 
-echo
-echo "-- Download and install cppcheck-1.87 (Feb-2019)..."  
-wget https://github.com/danmar/cppcheck/archive/1.87.tar.gz
-tar -xzf 1.87.tar.gz 
-cd cppcheck-1.87/
-make SRCDIR=build CFGDIR=cfg HAVE_RULES=yes CXXFLAGS="-O2 -DNDEBUG -Wall -Wno-sign-compare -Wno-unused-function"
-sudo make install
-echo "-- cppcheck --version"  
-cppcheck --version
+# echo
+# echo "-- cd $PROJECT_DIR"
+# cd $PROJECT_DIR
+# echo "-- pwd"
+# pwd
 
-echo
-echo "-- cd $PROJECT_DIR"
-cd $PROJECT_DIR
-echo "-- pwd"
-pwd
+# echo
+# echo "-- cppcheck --enable=all --std=c++11 src/robomongo/utils/RoboCrypt_test.cpp: "  
+# cppcheck --enable=all --std=c++11 src/robomongo/utils/RoboCrypt_test.cpp
 
-echo
-echo "-- cppcheck --enable=all --std=c++11 src/robomongo/utils/RoboCrypt_test.cpp: "  
-cppcheck --enable=all --std=c++11 src/robomongo/utils/RoboCrypt_test.cpp
-
-exit 1
-
+# exit 1
 # -----------------
 
 echo
