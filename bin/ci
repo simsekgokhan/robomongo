@@ -32,7 +32,7 @@ wget https://github.com/danmar/cppcheck/archive/1.87.tar.gz
 tar -xzf 1.87.tar.gz 
 cd cppcheck-1.87/
 make -j2
-sudo make install
+sudo make install CFGDIR=/usr/share/cppcheck/
 echo "-- cppcheck --version"  
 cppcheck --version
 
@@ -45,12 +45,6 @@ pwd
 echo
 echo "-- cppcheck --enable=all --std=c++11 src/robomongo/utils/RoboCrypt_test.cpp: "  
 cppcheck --enable=all --std=c++11 src/robomongo/utils/RoboCrypt_test.cpp
-
-echo "-- ls -l"                  
-ls -l
-
-echo "-- ls -l src/robomongo/utils/"                  
-ls -l src/robomongo/utils/
 
 exit 1
 
