@@ -35,11 +35,12 @@ make -j2
 sudo make install
 echo "-- cppcheck --version"  
 cppcheck --version
-exit 1
 
 echo
 echo "-- cppcheck --enable=all --std=c++11 src/robomongo/utils/RoboCrypt_test.cpp: "  
 cppcheck --enable=all --std=c++11 src/robomongo/utils/RoboCrypt_test.cpp
+
+exit 1
 
 # -----------------
 
