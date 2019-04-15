@@ -31,8 +31,8 @@ echo "-- Download and install cppcheck-1.87 (Feb-2019)..."
 wget https://github.com/danmar/cppcheck/archive/1.87.tar.gz
 tar -xzf 1.87.tar.gz 
 cd cppcheck-1.87/
-make -j2
-sudo make install CFGDIR=/usr/share/cppcheck/
+make SRCDIR=build CFGDIR=cfg HAVE_RULES=yes CXXFLAGS="-O2 -DNDEBUG -Wall -Wno-sign-compare -Wno-unused-function"
+sudo make install
 echo "-- cppcheck --version"  
 cppcheck --version
 
