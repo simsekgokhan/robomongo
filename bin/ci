@@ -37,6 +37,12 @@ echo "-- cppcheck --version"
 cppcheck --version
 
 echo
+echo "-- cd $PROJECT_DIR"
+cd $PROJECT_DIR
+echo "-- pwd"
+pwd
+
+echo
 echo "-- cppcheck --enable=all --std=c++11 src/robomongo/utils/RoboCrypt_test.cpp: "  
 cppcheck --enable=all --std=c++11 src/robomongo/utils/RoboCrypt_test.cpp
 
