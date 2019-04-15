@@ -40,6 +40,12 @@ echo
 echo "-- cppcheck --enable=all --std=c++11 src/robomongo/utils/RoboCrypt_test.cpp: "  
 cppcheck --enable=all --std=c++11 src/robomongo/utils/RoboCrypt_test.cpp
 
+echo "-- ls -l"                  
+ls -l
+
+echo "-- ls -l src/robomongo/utils/"                  
+ls -l src/robomongo/utils/
+
 exit 1
 
 # -----------------
