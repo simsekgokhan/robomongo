@@ -17,10 +17,13 @@ ls -lh
 echo "-- wget --quiet https://drive.google.com/uc?id=1rTDqSIKgm6ebgramI5Do3lf8djzTQ9Gz -O xx.zip"
 wget --quiet https://drive.google.com/uc?id=1rTDqSIKgm6ebgramI5Do3lf8djzTQ9Gz -O xx.zip
 
+echo "-- unzip xx.zip"
+unzip xx.zip
+
 echo "-- ls -lh"
 ls -lh
 
-echo "-- free -m"
-free -m
+echo "-- df -h"
+df -h
 
 
