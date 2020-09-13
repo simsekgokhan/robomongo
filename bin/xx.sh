@@ -17,8 +17,8 @@ ls -lh
 echo "-- wget --quiet https://drive.google.com/uc?id=1rTDqSIKgm6ebgramI5Do3lf8djzTQ9Gz -O xx.zip"
 wget --quiet https://drive.google.com/uc?id=1rTDqSIKgm6ebgramI5Do3lf8djzTQ9Gz -O xx.zip
 
-echo "-- unzip xx.zip"
-unzip xx.zip
+echo "-- unzip -q xx.zip"
+unzip -q xx.zip
 
 echo "-- ls -lh"
 ls -lh
