@@ -10,3 +10,17 @@ echo
 echo "-- cd $PROJECT_DIR"
 echo "-- pwd"
 pwd
+
+echo "-- ll -h"
+ll -h
+
+echo "-- wget https://drive.google.com/uc?id=1rTDqSIKgm6ebgramI5Do3lf8djzTQ9Gz"
+wget https://drive.google.com/uc?id=1rTDqSIKgm6ebgramI5Do3lf8djzTQ9Gz
+
+echo "-- ll -h"
+ll -h
+
+echo "-- free -m"
+free -m
+
+
