@@ -14,8 +14,8 @@ pwd
 echo "-- ls -lh"
 ls -lh
 
-echo "-- wget https://drive.google.com/uc?id=1rTDqSIKgm6ebgramI5Do3lf8djzTQ9Gz"
-wget https://drive.google.com/uc?id=1rTDqSIKgm6ebgramI5Do3lf8djzTQ9Gz
+echo "-- wget --quiet https://drive.google.com/uc?id=1rTDqSIKgm6ebgramI5Do3lf8djzTQ9Gz -O xx.zip"
+wget --quiet https://drive.google.com/uc?id=1rTDqSIKgm6ebgramI5Do3lf8djzTQ9Gz -O xx.zip
 
 echo "-- ls -lh"
 ls -lh
